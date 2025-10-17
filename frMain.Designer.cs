@@ -29,57 +29,83 @@
         private void InitializeComponent()
         {
             menuStrip1 = new MenuStrip();
-            hệThốngToolStripMenuItem = new ToolStripMenuItem();
+            navbarSystem = new ToolStripMenuItem();
+            itemLogin = new ToolStripMenuItem();
+            itemLogout = new ToolStripMenuItem();
             narbarDashboad = new ToolStripMenuItem();
             navbarBook = new ToolStripMenuItem();
             navbarAuthor = new ToolStripMenuItem();
             narbarReaders = new ToolStripMenuItem();
             itemsLogin = new ToolStripMenuItem();
             itemsLogout = new ToolStripMenuItem();
-            panelContainer = new Panel();
+            panelMain = new Panel();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
+            menuStrip1.BackColor = SystemColors.ActiveCaption;
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { hệThốngToolStripMenuItem, narbarDashboad, navbarBook, navbarAuthor, narbarReaders });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { navbarSystem, narbarDashboad, navbarBook, navbarAuthor, narbarReaders });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(810, 28);
+            menuStrip1.Size = new Size(1902, 45);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
+            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
-            // hệThốngToolStripMenuItem
+            // navbarSystem
             // 
-            hệThốngToolStripMenuItem.Name = "hệThốngToolStripMenuItem";
-            hệThốngToolStripMenuItem.Size = new Size(14, 24);
+            navbarSystem.DropDownItems.AddRange(new ToolStripItem[] { itemLogin, itemLogout });
+            navbarSystem.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            navbarSystem.Name = "navbarSystem";
+            navbarSystem.Size = new Size(151, 41);
+            navbarSystem.Text = "Hệ Thống";
+            navbarSystem.Click += navbarSystem_Click;
+            // 
+            // itemLogin
+            // 
+            itemLogin.Name = "itemLogin";
+            itemLogin.Size = new Size(242, 42);
+            itemLogin.Text = "Đăng nhập";
+            itemLogin.Click += itemLogin_Click;
+            // 
+            // itemLogout
+            // 
+            itemLogout.Name = "itemLogout";
+            itemLogout.Size = new Size(242, 42);
+            itemLogout.Text = "Đăng xuất";
+            itemLogout.Click += itemLogout_Click;
             // 
             // narbarDashboad
             // 
+            narbarDashboad.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
             narbarDashboad.Name = "narbarDashboad";
-            narbarDashboad.Size = new Size(94, 24);
+            narbarDashboad.Size = new Size(163, 41);
             narbarDashboad.Text = "Tổng quan";
             narbarDashboad.Click += narbarDashboad_Click;
             // 
             // navbarBook
             // 
+            navbarBook.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
             navbarBook.Name = "navbarBook";
-            navbarBook.Size = new Size(54, 24);
+            navbarBook.Size = new Size(89, 41);
             navbarBook.Text = "Sách";
             navbarBook.Click += navbarBook_Click;
             // 
             // navbarAuthor
             // 
+            navbarAuthor.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
             navbarAuthor.Name = "navbarAuthor";
-            navbarAuthor.Size = new Size(69, 24);
+            navbarAuthor.Size = new Size(114, 41);
             navbarAuthor.Text = "Tác giả";
             navbarAuthor.Click += navbarAuthor_Click;
             // 
             // narbarReaders
             // 
+            narbarReaders.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
             narbarReaders.Name = "narbarReaders";
-            narbarReaders.Size = new Size(75, 24);
+            narbarReaders.Size = new Size(123, 41);
             narbarReaders.Text = "Độc giả";
             narbarReaders.Click += narbarReaders_Click;
             // 
@@ -97,20 +123,19 @@
             itemsLogout.Text = "Đăng xuẩt";
             itemsLogout.Click += itemsLogout_Click;
             // 
-            // panelContainer
+            // panelMain
             // 
-            panelContainer.Dock = DockStyle.Fill;
-            panelContainer.Location = new Point(0, 28);
-            panelContainer.Name = "panelContainer";
-            panelContainer.Size = new Size(810, 422);
-            panelContainer.TabIndex = 1;
+            panelMain.Location = new Point(0, 44);
+            panelMain.Name = "panelMain";
+            panelMain.Size = new Size(1902, 986);
+            panelMain.TabIndex = 2;
             // 
             // frMain
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(810, 450);
-            Controls.Add(panelContainer);
+            ClientSize = new Size(1902, 1033);
+            Controls.Add(panelMain);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "frMain";
@@ -126,14 +151,15 @@
         #endregion
 
         private MenuStrip menuStrip1;
-        private ToolStripMenuItem hệThốngToolStripMenuItem;
+        private ToolStripMenuItem navbarSystem;
         private ToolStripMenuItem itemsLogin;
         private ToolStripMenuItem itemsLogout;
         private ToolStripMenuItem navbarBook;
         private ToolStripMenuItem navbarAuthor;
         private ToolStripMenuItem narbarReaders;
         private ToolStripMenuItem narbarDashboad;
-        private Panel panelContainer;
-
+        private ToolStripMenuItem itemLogin;
+        private ToolStripMenuItem itemLogout;
+        private Panel panelMain;
     }
 }
