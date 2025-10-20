@@ -10,10 +10,14 @@
 
   <ItemGroup>
     <None Remove="Data\Author.csv" />
+    <None Remove="Data\ListBook.csv" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Data\Author.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\ListBook.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

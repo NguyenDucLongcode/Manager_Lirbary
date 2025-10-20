@@ -261,6 +261,16 @@ namespace WinFormsApp1
                 return;
             }
 
+
+            // Check trùng số điện thoại
+            if (authorList.Any(a => a.PhoneNumber == phone))
+            {
+                MessageBox.Show("Số điện thoại đã tồn tại đã tồn tại", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtAuthorId.Focus();
+                return;
+            }
+
             CreateAuthor.PhoneNumber = FucString.Standard(phone);
 
             // Địa chỉ
@@ -272,13 +282,6 @@ namespace WinFormsApp1
                 return;
             }
 
-            if (FucString.ContainsSpecialCharacters(txtAddress.Text))
-            {
-                MessageBox.Show("Địa chỉ không được có kí tự đặc biệt", "Lỗi",
-                  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtAddress.Focus();
-                return;
-            }
             CreateAuthor.Address = FucString.FirstCapitalLetter(txtAddress.Text);
 
             // CMMD
@@ -305,6 +308,16 @@ namespace WinFormsApp1
                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            // Check cmmnd
+            if (authorList.Any(a => a.CMND == CMND))
+            {
+                MessageBox.Show("CMND đã tồn tại đã tồn tại", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtAuthorId.Focus();
+                return;
+            }
+
             CreateAuthor.CMND = FucString.Standard(txtCMND.Text);
 
 
