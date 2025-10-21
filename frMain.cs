@@ -30,7 +30,7 @@
 
         private void navbarBook_Click(object sender, EventArgs e)
         {
-
+            OpenFormInPanel(new FrmListBook());
         }
 
         private void navbarAuthor_Click(object sender, EventArgs e)
