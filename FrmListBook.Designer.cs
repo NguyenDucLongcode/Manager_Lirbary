@@ -313,6 +313,14 @@
             comboBoxTheLoai.Size = new Size(272, 31);
             comboBoxTheLoai.TabIndex = 19;
             // 
+            // txtTheLoai
+            // 
+            txtTheLoai.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtTheLoai.Location = new Point(152, 176);
+            txtTheLoai.Name = "txtTheLoai";
+            txtTheLoai.Size = new Size(271, 36);
+            txtTheLoai.TabIndex = 18;
+            // 
             // label11
             // 
             label11.AutoSize = true;
@@ -460,6 +468,7 @@
         private Label label9;
         private TextBox txtMaTacGia;
         private Label label8;
+        private TextBox txtTheLoai;
         private Label label11;
         private GroupBox groupBox4;
         private Button btnDetail;
@@ -467,6 +476,8 @@
         private Button btnUpdate;
         private Button btnCreate;
         private Button btnHuy;
+        private TextBox txtNhaXB;
+        private Label label6;
         private DataGridViewTextBoxColumn MaSach;
         private DataGridViewTextBoxColumn TenSach;
         private DataGridViewTextBoxColumn TheLoai;

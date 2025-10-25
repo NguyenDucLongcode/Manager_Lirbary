@@ -57,6 +57,7 @@ namespace WinFormsApp1
             dgvListBook.Columns.Add("MaSach", "Mã Sách");
             dgvListBook.Columns.Add("TenSach", "Tên Sách");
             dgvListBook.Columns.Add("TheLoai", "Thể Loại");
+            dgvListBook.Columns.Add("NhaXB", "Nhà XB");
             dgvListBook.Columns.Add("NgayXB", "Ngày XB");
             dgvListBook.Columns.Add("MaTacGia", "Mã Tác Giả");
             dgvListBook.Columns.Add("GiaTien", "Giá Tiền");
@@ -107,6 +108,7 @@ namespace WinFormsApp1
                     book.MaSach,
                     book.TenSach,
                     book.TheLoai,
+                    book.NhaXB,
                     FormatDate(book.NgayXB),
                     book.MaTacGia,
                     FormatCurrency(book.GiaTien)
@@ -299,7 +301,13 @@ namespace WinFormsApp1
                 //    return;
                 //}
 
-         
+
+                if (string.IsNullOrWhiteSpace(txtNhaXB.Text))
+                {
+                    MessageBox.Show("Nhà xuất bản không được để trống", "Lỗi");
+                    txtNhaXB.Focus();
+                    return;
+                }
 
                 if (string.IsNullOrWhiteSpace(txtMaTacGia.Text))
                 {
@@ -396,6 +404,7 @@ namespace WinFormsApp1
                         (b.MaSach?.ToLower().Contains(filterText) ?? false) ||
                         (b.TenSach?.ToLower().Contains(filterText) ?? false) ||
                         (b.TheLoai?.ToLower().Contains(filterText) ?? false) ||
+                        (b.NhaXB?.ToLower().Contains(filterText) ?? false) ||
                         (b.MaTacGia?.ToLower().Contains(filterText) ?? false) ||
                         (b.GiaTien?.ToLower().Contains(filterText) ?? false)
                     ).ToList();
@@ -409,6 +418,7 @@ namespace WinFormsApp1
                             book.MaSach,
                             book.TenSach,
                             book.TheLoai,
+                            book.NhaXB,
                             FormatDate(book.NgayXB),
                             book.MaTacGia,
                             FormatCurrency(book.GiaTien)
