@@ -25,6 +25,9 @@ namespace WinFormsApp1
             dgvMuonSach.Columns["NgayMuon"].DataPropertyName = "NgayMuon";
             dgvMuonSach.Columns["NgayTra"].DataPropertyName = "NgayTra";
 
+            // THÊM SỰ KIỆN TÌM KIẾM
+            txtTimKiem.TextChanged += new EventHandler(txtTimKiem_TextChanged);
+
             LoadData();
         }
 
@@ -34,8 +37,11 @@ namespace WinFormsApp1
             {
                 MuonSach muonSach = new MuonSach();
                 muonSaches = muonSach.GetList();
+
+                // CẬP NHẬT LẠI DATASOURCE
                 dgvMuonSach.DataSource = null;
                 dgvMuonSach.DataSource = muonSaches;
+
                 ClearMuonSachForm();
             }
             catch (Exception ex)
@@ -45,7 +51,45 @@ namespace WinFormsApp1
             }
         }
 
-        // SỬA: Thay đổi từ CellContentClick sang CellClick - chỉ cần click 1 lần
+        // SỰ KIỆN TÌM KIẾM - SỬA LẠI ĐỂ HOẠT ĐỘNG TỐT HƠN
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string filterText = txtTimKiem.Text.Trim();
+
+                if (string.IsNullOrEmpty(filterText))
+                {
+                    // Hiển thị toàn bộ dữ liệu khi không có từ khóa tìm kiếm
+                    dgvMuonSach.DataSource = null;
+                    dgvMuonSach.DataSource = muonSaches;
+                }
+                else
+                {
+                    // Tìm kiếm không phân biệt hoa thường
+                    var filtered = muonSaches.Where(m =>
+                        m.MaSach.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
+                        .ToList();
+
+                    dgvMuonSach.DataSource = null;
+                    dgvMuonSach.DataSource = filtered;
+
+                    // Hiển thị thông báo nếu không tìm thấy
+                    if (filtered.Count == 0)
+                    {
+                        MessageBox.Show($"Không tìm thấy mã sách: {filterText}", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tìm kiếm: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // SỰ KIỆN CLICK VÀO Ô TRONG BẢNG
         private void dgvMuonSach_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < dgvMuonSach.Rows.Count)
@@ -91,7 +135,7 @@ namespace WinFormsApp1
             txtMaSach.Focus();
         }
 
-        // THÊM MỚI
+        // NÚT THÊM
         private void btnThem_Click(object sender, EventArgs e)
         {
             try
@@ -119,8 +163,10 @@ namespace WinFormsApp1
 
                 if (CreateMuonSach.SaveList(muonSaches))
                 {
+                    // CẬP NHẬT LẠI DATASOURCE SAU KHI THÊM
                     dgvMuonSach.DataSource = null;
                     dgvMuonSach.DataSource = muonSaches;
+
                     ClearMuonSachForm();
                     MessageBox.Show("Thêm mượn sách thành công!", "Thành công",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -138,7 +184,7 @@ namespace WinFormsApp1
             }
         }
 
-        // SỬA
+        // NÚT SỬA
         private void btnSua_Click(object sender, EventArgs e)
         {
             try
@@ -158,7 +204,6 @@ namespace WinFormsApp1
 
                 if (confirm == DialogResult.Yes)
                 {
-                    // Cập nhật đối tượng được chọn
                     SelectMuonSach.MaSach = txtMaSach.Text.Trim();
                     SelectMuonSach.SoLuong = txtSoLuong.Text.Trim();
                     SelectMuonSach.NgayMuon = dateTimePickerNgayMuon.Value.ToString("dd/MM/yyyy");
@@ -172,8 +217,10 @@ namespace WinFormsApp1
 
                     if (SelectMuonSach.SaveList(muonSaches))
                     {
+                        // CẬP NHẬT LẠI DATASOURCE SAU KHI SỬA
                         dgvMuonSach.DataSource = null;
                         dgvMuonSach.DataSource = muonSaches;
+
                         ClearMuonSachForm();
                         MessageBox.Show("Cập nhật thành công!", "Thành công",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -192,7 +239,7 @@ namespace WinFormsApp1
             }
         }
 
-        // XÓA
+        // NÚT XÓA
         private void btnXoa_Click(object sender, EventArgs e)
         {
             try
@@ -213,8 +260,10 @@ namespace WinFormsApp1
 
                     if (new MuonSach().SaveList(muonSaches))
                     {
+                        // CẬP NHẬT LẠI DATASOURCE SAU KHI XÓA
                         dgvMuonSach.DataSource = null;
                         dgvMuonSach.DataSource = muonSaches;
+
                         ClearMuonSachForm();
                         MessageBox.Show("Xóa thành công!", "Thành công",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -233,8 +282,7 @@ namespace WinFormsApp1
             }
         }
 
-        // CHI TIẾT - XÓA phương thức btnChiTiet_Click (vì đã có btnDetail_Click)
-        // CHỈ GIỮ LẠI MỘT PHƯƠNG THỨC
+        // NÚT CHI TIẾT
         private void btnDetail_Click(object sender, EventArgs e)
         {
             if (indexSelectMuonSach == -1)
@@ -254,35 +302,19 @@ namespace WinFormsApp1
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // LÀM MỚI/HỦY
+        // NÚT LÀM MỚI/HỦY
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             ClearMuonSachForm();
         }
 
-        // TẢI LẠI DỮ LIỆU
+        // NÚT TẢI LẠI - THÊM PHƯƠNG THỨC NÀY
         private void btnTaiLai_Click(object sender, EventArgs e)
         {
             LoadData();
-            txtTimKiem.Text = "";
+            txtTimKiem.Text = ""; // Xóa nội dung tìm kiếm
             MessageBox.Show("Đã tải lại dữ liệu!", "Thông báo",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        // TÌM KIẾM
-        private void txtTimKiem_TextChanged(object sender, EventArgs e)
-        {
-            string filterText = txtTimKiem.Text.Trim().ToLower();
-
-            if (string.IsNullOrEmpty(filterText))
-            {
-                dgvMuonSach.DataSource = muonSaches;
-            }
-            else
-            {
-                var filtered = new MuonSach().SearchByMaSach(muonSaches, filterText);
-                dgvMuonSach.DataSource = filtered;
-            }
         }
 
         // KIỂM TRA DỮ LIỆU NHẬP
@@ -341,7 +373,7 @@ namespace WinFormsApp1
             }
         }
 
-        // THOÁT
+        // NÚT THOÁT
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
