@@ -76,5 +76,15 @@
         {
 
         }
+
+        private void mượnSáchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFormInPanel(new FrmMuonSach());
+        }
+
+        private void quảnLýMượnTrảToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
