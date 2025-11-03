@@ -36,6 +36,9 @@
             navbarBook = new ToolStripMenuItem();
             navbarAuthor = new ToolStripMenuItem();
             narbarReaders = new ToolStripMenuItem();
+            quảnLýMượnTrảToolStripMenuItem = new ToolStripMenuItem();
+            mượnSáchToolStripMenuItem = new ToolStripMenuItem();
+            trảSáchToolStripMenuItem = new ToolStripMenuItem();
             itemsLogin = new ToolStripMenuItem();
             itemsLogout = new ToolStripMenuItem();
             panelMain = new Panel();
@@ -46,7 +49,7 @@
             // 
             menuStrip1.BackColor = SystemColors.ActiveCaption;
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { navbarSystem, narbarDashboad, navbarBook, navbarAuthor, narbarReaders });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { navbarSystem, narbarDashboad, navbarBook, navbarAuthor, narbarReaders, quảnLýMượnTrảToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1902, 45);
@@ -109,6 +112,28 @@
             narbarReaders.Text = "Độc giả";
             narbarReaders.Click += narbarReaders_Click;
             // 
+            // quảnLýMượnTrảToolStripMenuItem
+            // 
+            quảnLýMượnTrảToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mượnSáchToolStripMenuItem, trảSáchToolStripMenuItem });
+            quảnLýMượnTrảToolStripMenuItem.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            quảnLýMượnTrảToolStripMenuItem.Name = "quảnLýMượnTrảToolStripMenuItem";
+            quảnLýMượnTrảToolStripMenuItem.Size = new Size(247, 41);
+            quảnLýMượnTrảToolStripMenuItem.Text = "Quản lý mượn trả";
+            quảnLýMượnTrảToolStripMenuItem.Click += quảnLýMượnTrảToolStripMenuItem_Click;
+            // 
+            // mượnSáchToolStripMenuItem
+            // 
+            mượnSáchToolStripMenuItem.Name = "mượnSáchToolStripMenuItem";
+            mượnSáchToolStripMenuItem.Size = new Size(245, 42);
+            mượnSáchToolStripMenuItem.Text = "Mượn sách";
+            mượnSáchToolStripMenuItem.Click += mượnSáchToolStripMenuItem_Click;
+            // 
+            // trảSáchToolStripMenuItem
+            // 
+            trảSáchToolStripMenuItem.Name = "trảSáchToolStripMenuItem";
+            trảSáchToolStripMenuItem.Size = new Size(245, 42);
+            trảSáchToolStripMenuItem.Text = "Trả sách";
+            // 
             // itemsLogin
             // 
             itemsLogin.Name = "itemsLogin";
@@ -161,5 +186,8 @@
         private ToolStripMenuItem itemLogin;
         private ToolStripMenuItem itemLogout;
         private Panel panelMain;
+        private ToolStripMenuItem quảnLýMượnTrảToolStripMenuItem;
+        private ToolStripMenuItem mượnSáchToolStripMenuItem;
+        private ToolStripMenuItem trảSáchToolStripMenuItem;
     }
 }
