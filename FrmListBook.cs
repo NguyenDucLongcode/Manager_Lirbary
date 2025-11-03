@@ -14,13 +14,15 @@ namespace WinFormsApp1
         private ListBook createBook = new ListBook();
         private ListBook listBookHelper = new ListBook();
         private List<string> categories = new List<string>()
-    {
+        {
         "Văn học", "Khoa học", "Lịch sử", "Triết học", "Tâm lý học",
         "Kinh tế", "Kinh doanh", "Công nghệ thông tin", "Kỹ năng sống",
         "Sách thiếu nhi", "Trinh thám", "Viễn tưởng", "Tiểu thuyết",
         "Truyện ngắn", "Thơ", "Hồi ký", "Du ký", "Ẩm thực", "Nghệ thuật",
         "Âm nhạc", "Y học", "Sức khỏe", "Thể thao", "Tôn giáo", "Chính trị"
-    };
+        };
+
+      
 
         private int selectedBookIndex = -1;
 
@@ -36,17 +38,28 @@ namespace WinFormsApp1
             LoadBookData();
             ClearForm();
 
-            // comboBox
-            comboBoxTheLoai.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBoxTheLoai.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            // nạp danh sách tác giả nếu chưa có
+            if (ShareData.AuthorList.Count == 0)
+            {
+                Author author = new Author();
+                ShareData.AuthorList = author.GetList();          
+              
+            }
 
-            AutoCompleteStringCollection autoComplete = new AutoCompleteStringCollection();
-            autoComplete.AddRange(categories.ToArray());
-            comboBoxTheLoai.AutoCompleteCustomSource = autoComplete;
-
+            // comboBox thể loại
+            comboBoxTheLoai.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Gợi ý và tự động hoàn thành
+            comboBoxTheLoai.AutoCompleteSource = AutoCompleteSource.ListItems; // Dùng chính danh sách DataSource
             comboBoxTheLoai.DataSource = categories;
-            comboBoxTheLoai.SelectedIndex = -1; // Không chọn mục nào
-            comboBoxTheLoai.Text = "Chọn thể loại..."; // Hiển thị placeholder
+            comboBoxTheLoai.SelectedIndex = -1;
+            comboBoxTheLoai.Text = "Chọn thể loại...";
+
+            // comboBoxMaTacGia
+            comboBoxMaTacGia.DisplayMember = "PenName";  // Hiển thị bút danh
+            comboBoxMaTacGia.ValueMember = "AuthorID";         // Lưu giá trị thật là ID
+            comboBoxMaTacGia.DataSource = ShareData.AuthorList;
+            comboBoxMaTacGia.SelectedIndex = -1;
+            comboBoxMaTacGia.Text = "Chọn tác giả...";
+
         }
 
         private void SetupDataGridView()
@@ -57,7 +70,6 @@ namespace WinFormsApp1
             dgvListBook.Columns.Add("MaSach", "Mã Sách");
             dgvListBook.Columns.Add("TenSach", "Tên Sách");
             dgvListBook.Columns.Add("TheLoai", "Thể Loại");
-            dgvListBook.Columns.Add("NhaXB", "Nhà XB");
             dgvListBook.Columns.Add("NgayXB", "Ngày XB");
             dgvListBook.Columns.Add("MaTacGia", "Mã Tác Giả");
             dgvListBook.Columns.Add("GiaTien", "Giá Tiền");
@@ -108,7 +120,6 @@ namespace WinFormsApp1
                     book.MaSach,
                     book.TenSach,
                     book.TheLoai,
-                    book.NhaXB,
                     FormatDate(book.NgayXB),
                     book.MaTacGia,
                     FormatCurrency(book.GiaTien)
@@ -146,8 +157,9 @@ namespace WinFormsApp1
             {
                 txtMaSach.Text = selectedBook.MaSach;
                 txtTenSach.Text = selectedBook.TenSach;
-                //txtTheLoai.Text = selectedBook.TheLoai;
-                txtMaTacGia.Text = selectedBook.MaTacGia;
+                comboBoxMaTacGia.SelectedValue = selectedBook.MaTacGia;
+                comboBoxTheLoai.Text = selectedBook.TheLoai;
+              
 
                 // Xử lý giá tiền
                 string giaTien = selectedBook.GiaTien;
@@ -190,8 +202,8 @@ namespace WinFormsApp1
 
             txtMaSach.Text = "";
             txtTenSach.Text = "";
-            //txtTheLoai.Text = "";
-            txtMaTacGia.Text = "";
+            comboBoxMaTacGia.SelectedIndex = -1; // Reset comboBox Mã tác giả
+            comboBoxTheLoai.SelectedIndex = -1; // Reset comboBox Thể loại
             txtGiaTien.Text = "";
             dateTimePickerBook.Value = DateTime.Now;
 
@@ -232,20 +244,30 @@ namespace WinFormsApp1
                     return;
                 }
 
-                //if (string.IsNullOrWhiteSpace(txtTheLoai.Text))
-                //{
-                //    MessageBox.Show("Thể loại không được để trống", "Lỗi");
-                //    txtTheLoai.Focus();
-                //    return;
-                //}
+                // validate thể loại
+                string selectedTheLoai = comboBoxTheLoai.Text; // hoặc comboBoxMaTacGia.Text
 
-                if (string.IsNullOrWhiteSpace(txtMaTacGia.Text))
+                if (string.IsNullOrWhiteSpace(selectedTheLoai) || selectedTheLoai == "Chọn thể loại...")
                 {
-                    MessageBox.Show("Mã tác giả không được để trống", "Lỗi");
-                    txtMaTacGia.Focus();
+                    MessageBox.Show("Vui lòng chọn thể loại!");
                     return;
                 }
 
+                // Ngày sinh
+                DateTime birthDate = dateTimePickerBook.Value;
+                DateTime now = DateTime.Now;
+                if (birthDate > now)
+                {
+                    MessageBox.Show("Ngày xuất bản không thể ở tương lai!");
+                }
+
+                // validate tác giả
+                if (comboBoxMaTacGia.SelectedIndex == -1 || comboBoxMaTacGia.Text == "Chọn tác giả...")
+                {
+                    MessageBox.Show("Vui lòng chọn tác giả!");
+                    return;
+                }
+              
                 string giaTien = txtGiaTien.Text.Trim();
                 if (string.IsNullOrWhiteSpace(giaTien) || !long.TryParse(giaTien, out long gia) || gia < 0)
                 {
@@ -259,9 +281,9 @@ namespace WinFormsApp1
                 {
                     MaSach = maSach.Trim().ToUpper(),
                     TenSach = txtTenSach.Text.Trim(),
-                    //TheLoai = txtTheLoai.Text.Trim(),
+                    TheLoai = selectedTheLoai,
                     NgayXB = dateTimePickerBook.Value.ToString("yyyy-MM-dd"),
-                    MaTacGia = txtMaTacGia.Text.Trim().ToUpper(),
+                    MaTacGia = comboBoxMaTacGia.SelectedValue.ToString(),
                     GiaTien = gia.ToString()
                 };
 
@@ -294,25 +316,28 @@ namespace WinFormsApp1
                     return;
                 }
 
-                //if (string.IsNullOrWhiteSpace(txtTheLoai.Text))
-                //{
-                //    MessageBox.Show("Thể loại không được để trống", "Lỗi");
-                //    txtTheLoai.Focus();
-                //    return;
-                //}
+                // validate thể loại
+                string selectedTheLoai = comboBoxTheLoai.Text; // hoặc comboBoxMaTacGia.Text
 
-
-                if (string.IsNullOrWhiteSpace(txtNhaXB.Text))
+                if (string.IsNullOrWhiteSpace(selectedTheLoai) || selectedTheLoai == "Chọn thể loại...")
                 {
-                    MessageBox.Show("Nhà xuất bản không được để trống", "Lỗi");
-                    txtNhaXB.Focus();
+                    MessageBox.Show("Vui lòng chọn thể loại!");
                     return;
                 }
 
-                if (string.IsNullOrWhiteSpace(txtMaTacGia.Text))
+                // Ngày xuất bản
+                DateTime birthDate = dateTimePickerBook.Value;
+                DateTime now = DateTime.Now;
+                if (birthDate > now)
                 {
-                    MessageBox.Show("Mã tác giả không được để trống", "Lỗi");
-                    txtMaTacGia.Focus();
+                    MessageBox.Show("Ngày xuất bản không thể ở tương lai!");
+                }
+
+
+                // validate tác giả
+                if (comboBoxMaTacGia.SelectedIndex == -1 || comboBoxMaTacGia.Text == "Chọn tác giả...")
+                {
+                    MessageBox.Show("Vui lòng chọn tác giả!");
                     return;
                 }
 
@@ -334,10 +359,10 @@ namespace WinFormsApp1
                 {
                     // Cập nhật thông tin
                     selectedBook.TenSach = txtTenSach.Text.Trim();
-                    //selectedBook.TheLoai = txtTheLoai.Text.Trim();
-                  
+                    selectedBook.TheLoai = selectedTheLoai;
+                    selectedBook.MaTacGia = comboBoxMaTacGia.SelectedValue.ToString();
                     selectedBook.NgayXB = dateTimePickerBook.Value.ToString("yyyy-MM-dd");
-                    selectedBook.MaTacGia = txtMaTacGia.Text.Trim().ToUpper();
+
                     selectedBook.GiaTien = gia.ToString();
 
                     RefreshDataGrid();
@@ -404,7 +429,6 @@ namespace WinFormsApp1
                         (b.MaSach?.ToLower().Contains(filterText) ?? false) ||
                         (b.TenSach?.ToLower().Contains(filterText) ?? false) ||
                         (b.TheLoai?.ToLower().Contains(filterText) ?? false) ||
-                        (b.NhaXB?.ToLower().Contains(filterText) ?? false) ||
                         (b.MaTacGia?.ToLower().Contains(filterText) ?? false) ||
                         (b.GiaTien?.ToLower().Contains(filterText) ?? false)
                     ).ToList();
@@ -418,7 +442,7 @@ namespace WinFormsApp1
                             book.MaSach,
                             book.TenSach,
                             book.TheLoai,
-                            book.NhaXB,
+                       
                             FormatDate(book.NgayXB),
                             book.MaTacGia,
                             FormatCurrency(book.GiaTien)

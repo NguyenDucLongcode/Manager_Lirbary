@@ -17,17 +17,28 @@ namespace WinFormsApp1
         List<Author> authorList = new List<Author>();
         Author CreateAuthor = new Author();
         Author SelectedAuthor = new Author();
-        int indexSelectedAuthor = -1;
+        int indexSelectedAuthor = -1; // Lưu chỉ số tác giả được chọn trong dgvAuthor
+
         public frAuthor()
         {
             InitializeComponent();
         }
 
         private void frAuthor_Load(object sender, EventArgs e)
-        {
-            Author author = new Author();
-            authorList = author.GetList();
-            dgvAuthor.DataSource = authorList;
+        { 
+            if(ShareData.AuthorList.Count > 0)
+            {
+                authorList = ShareData.AuthorList;
+                dgvAuthor.DataSource = authorList;       // Hiển thị lên DataGridView
+            }
+            else
+            {
+                Author author = new Author();
+                authorList = author.GetList();           // Lấy danh sách mới
+                ShareData.AuthorList = authorList;       // Cập nhật vào vùng chia sẻ
+                dgvAuthor.DataSource = authorList;       // Hiển thị lên DataGridView
+
+            }
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -65,19 +76,19 @@ namespace WinFormsApp1
                 if (gender == "Nam")
                 {
                     SelectedAuthor.Gender = "Nam";
-                    chkNam.Checked = true;
-                    chkNu.Checked = false;
+                    radioNam.Checked = true;
+                    radioNu.Checked = false;
                 }
                 else if (gender == "Nữ")
                 {
                     SelectedAuthor.Gender = "Nữ";
-                    chkNam.Checked = false;
-                    chkNu.Checked = true;
+                    radioNam.Checked = false;
+                    radioNu.Checked = true;
                 }
                 else
                 {
-                    chkNam.Checked = false;
-                    chkNu.Checked = false;
+                    radioNam.Checked = false;
+                    radioNu.Checked = false;
                 }
 
                 // Xử lý ngày sinh
@@ -105,11 +116,12 @@ namespace WinFormsApp1
             }
         }
 
+        // Reset lại các trường trong form tắc giả
         public void clearAuthorForm()
         {
             txtAuthorId.Text = txtAddress.Text = txtCMND.Text = txtName.Text = txtPenName.Text = txtPhone.Text = "";
-            if (chkNam.Checked) chkNam.Checked = false;
-            if (chkNu.Checked) chkNu.Checked = false;
+            if (radioNam.Checked) radioNam.Checked = false;
+            if (radioNu.Checked) radioNu.Checked = false;
             DateTime birthDate = dateTimePickerBirtday.Value;
             DateTime now = DateTime.Now;
             if (birthDate == now)
@@ -122,6 +134,7 @@ namespace WinFormsApp1
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
+            // Author ID và check rằng buộc
             string authorId = txtAuthorId.Text;
             if (authorId == "")
             {
@@ -198,28 +211,16 @@ namespace WinFormsApp1
             CreateAuthor.PenName = FucString.FirstCapitalLetter(txtPenName.Text);
 
             // Giới tính
-            if (chkNam.Checked && chkNu.Checked)
-            {
-                MessageBox.Show("Giới tính chỉ được chọn 1", "Lỗi",
-                  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                chkNam.Checked = false;
-                chkNu.Checked = false;
-                return;
-            }
-            else if (chkNam.Checked)
-            {
-                CreateAuthor.Gender = chkNam.Text;
-            }
-            else if (chkNu.Checked)
-            {
-                CreateAuthor.Gender = chkNu.Text;
-            }
-            else
+   
+            if (!radioNam.Checked && !radioNu.Checked)
             {
                 MessageBox.Show("Giới tính chưa được chọn", "Lỗi",
-                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            CreateAuthor.Gender = radioNam.Checked ? radioNam.Text : radioNu.Text;
+
 
 
             // Ngày sinh
@@ -231,7 +232,7 @@ namespace WinFormsApp1
             }
             else
             {
-                CreateAuthor.BirthDate = birthDate.ToString();
+                CreateAuthor.BirthDate = birthDate.ToString("yyyy-MM-dd");
 
             }
 
@@ -323,9 +324,10 @@ namespace WinFormsApp1
 
 
             authorList.Insert(0, CreateAuthor);
-            dgvAuthor.DataSource = null;
-            dgvAuthor.DataSource = authorList;
-            clearAuthorForm();
+            ShareData.AuthorList = authorList;       // Cập nhật vào vùng chia sẻ
+            dgvAuthor.DataSource = null; // Reset nguồn dữ liệu
+            dgvAuthor.DataSource = authorList; // Hiển thị lên DataGridView
+            clearAuthorForm(); // Xóa trắng form
         }
 
         private void btnHuy_Click(object sender, EventArgs e)
@@ -365,6 +367,7 @@ namespace WinFormsApp1
             SelectedAuthor.FullName = FucString.FirstCapitalLetter(txtName.Text);
 
             // Bút danh
+            
             if (txtPenName.Text == "")
             {
                 MessageBox.Show("Bút danh không được để trống", "Lỗi",
@@ -372,41 +375,33 @@ namespace WinFormsApp1
                 txtPenName.Focus();
                 return;
             }
-
-            // Check trùng bút danh
-            if (authorList.Any(a => a.PenName.ToLower() == txtPenName.Text.ToLower()))
+            
+            // Kiểm tra bút danh có thay đổi hay ko 
+            if(FucString.FirstCapitalLetter(txtPenName.Text) != SelectedAuthor.PenName)
             {
-                MessageBox.Show("Bút danh đã tồn tại", "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtAuthorId.Focus();
-                return;
-            }
+                // Check trùng bút danh
+                if (authorList.Any(a => a.PenName.ToLower() == txtPenName.Text.ToLower()))
+                {
+                    MessageBox.Show("Bút danh đã tồn tại", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtAuthorId.Focus();
+                    return;
+                }
+            }    
+          
 
             SelectedAuthor.PenName = FucString.FirstCapitalLetter(txtPenName.Text);
 
+           
             // Giới tính
-            if (chkNam.Checked && chkNu.Checked)
-            {
-                MessageBox.Show("Giới tính chỉ được chọn 1", "Lỗi",
-                  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                chkNam.Checked = false;
-                chkNu.Checked = false;
-                return;
-            }
-            else if (chkNam.Checked)
-            {
-                CreateAuthor.Gender = chkNam.Text;
-            }
-            else if (chkNu.Checked)
-            {
-                CreateAuthor.Gender = chkNu.Text;
-            }
-            else
+            if (!radioNam.Checked && !radioNu.Checked)
             {
                 MessageBox.Show("Giới tính chưa được chọn", "Lỗi",
-                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            SelectedAuthor.Gender = radioNam.Checked ? radioNam.Text : radioNu.Text;
 
 
             // Ngày sinh
@@ -415,10 +410,11 @@ namespace WinFormsApp1
             if (birthDate > now)
             {
                 MessageBox.Show("Ngày sinh không thể ở tương lai!");
+                return;
             }
             else
             {
-                SelectedAuthor.BirthDate = birthDate.ToString();
+                SelectedAuthor.BirthDate = birthDate.ToString("yyyy-MM-dd");
 
             }
 
@@ -446,6 +442,19 @@ namespace WinFormsApp1
                 MessageBox.Show("Số điện thoại phải dưới 15 số", "Lỗi",
                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
+
+            // Kiểm tra số điện thoại đã đc cập nhập chưa
+            if (FucString.FirstCapitalLetter(phone) != SelectedAuthor.PhoneNumber)
+            {
+                // Check trùng số điện thoại
+                if (authorList.Any(a => a.PhoneNumber == phone))
+                {
+                    MessageBox.Show("Số điện thoại đã tồn tại", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtAuthorId.Focus();
+                    return;
+                }
             }
 
             SelectedAuthor.PhoneNumber = FucString.Standard(phone);
@@ -492,6 +501,20 @@ namespace WinFormsApp1
                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            // Kiểm tra số CMND đã đc cập nhập chưa
+            if (FucString.FirstCapitalLetter(CMND) != SelectedAuthor.CMND)
+            {
+                // Check trùng số điện thoại
+                if (authorList.Any(a => a.CMND == CMND))
+                {
+                    MessageBox.Show("Số căn cước công dân đã tồn tại", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtAuthorId.Focus();
+                    return;
+                }
+            }
+
             SelectedAuthor.CMND = FucString.Standard(txtCMND.Text);
 
             // Xác nhận xóa
@@ -500,6 +523,14 @@ namespace WinFormsApp1
 
             if (confirm == DialogResult.Yes)
             {
+                // Kiểm tra đã chọn tác giả cần cập nhập chưa
+                if (indexSelectedAuthor == -1)
+                {
+                    MessageBox.Show("Vui lòng chọn tác giả cần cập nhập", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                   
                 // Cập nhập lại thông tin tại list Author
                 var existing = authorList.FirstOrDefault(s => s.AuthorID == SelectedAuthor.AuthorID);
                 if (existing == null)
@@ -520,12 +551,15 @@ namespace WinFormsApp1
                     existing.PenName = SelectedAuthor.PenName;
                 }
                 // render giá trị
+                ShareData.AuthorList = authorList;       // Cập nhật vào vùng chia sẻ
                 dgvAuthor.DataSource = null;
                 dgvAuthor.DataSource = authorList;
 
                 // Xuất thông báo
                 MessageBox.Show("Đã cập nhập tác giả thành công!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
             }
 
             clearAuthorForm();
@@ -543,8 +577,10 @@ namespace WinFormsApp1
             if (confirm == DialogResult.Yes)
             {
                 authorList.RemoveAt(indexSelectedAuthor);
+                ShareData.AuthorList = authorList;       // Cập nhật vào vùng chia sẻ
                 dgvAuthor.DataSource = null;
                 dgvAuthor.DataSource = authorList;
+                clearAuthorForm(); // Xóa trắng form 
 
                 MessageBox.Show("Đã xóa tác giả thành công!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);

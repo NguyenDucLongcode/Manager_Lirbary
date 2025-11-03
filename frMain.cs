@@ -5,6 +5,7 @@
         public frMain()
         {
             InitializeComponent();
+     
         }
 
         private void frMain_Load(object sender, EventArgs e)

@@ -62,13 +62,13 @@
             label8 = new Label();
             dateTimePickerBirtday = new DateTimePicker();
             label7 = new Label();
-            chkNu = new CheckBox();
             label6 = new Label();
-            chkNam = new CheckBox();
             txtName = new TextBox();
             label5 = new Label();
             txtAuthorId = new TextBox();
             label4 = new Label();
+            radioNam = new RadioButton();
+            radioNu = new RadioButton();
             tableLayoutPanel1.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAuthor).BeginInit();
@@ -312,6 +312,8 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(radioNu);
+            groupBox3.Controls.Add(radioNam);
             groupBox3.Controls.Add(txtPenName);
             groupBox3.Controls.Add(label11);
             groupBox3.Controls.Add(txtCMND);
@@ -322,9 +324,7 @@
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(dateTimePickerBirtday);
             groupBox3.Controls.Add(label7);
-            groupBox3.Controls.Add(chkNu);
             groupBox3.Controls.Add(label6);
-            groupBox3.Controls.Add(chkNam);
             groupBox3.Controls.Add(txtName);
             groupBox3.Controls.Add(label5);
             groupBox3.Controls.Add(txtAuthorId);
@@ -433,18 +433,6 @@
             label7.TabIndex = 9;
             label7.Text = "Ngày sinh";
             // 
-            // chkNu
-            // 
-            chkNu.AutoSize = true;
-            chkNu.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkNu.ForeColor = Color.DodgerBlue;
-            chkNu.Location = new Point(245, 230);
-            chkNu.Name = "chkNu";
-            chkNu.Size = new Size(61, 32);
-            chkNu.TabIndex = 7;
-            chkNu.Text = "Nữ";
-            chkNu.UseVisualStyleBackColor = true;
-            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -455,18 +443,6 @@
             label6.Size = new Size(99, 30);
             label6.TabIndex = 6;
             label6.Text = "Giới tính";
-            // 
-            // chkNam
-            // 
-            chkNam.AutoSize = true;
-            chkNam.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkNam.ForeColor = Color.DodgerBlue;
-            chkNam.Location = new Point(152, 230);
-            chkNam.Name = "chkNam";
-            chkNam.Size = new Size(77, 32);
-            chkNam.TabIndex = 4;
-            chkNam.Text = "Nam";
-            chkNam.UseVisualStyleBackColor = true;
             // 
             // txtName
             // 
@@ -506,6 +482,30 @@
             label4.TabIndex = 0;
             label4.Text = "Mã tác giả";
             // 
+            // radioNam
+            // 
+            radioNam.AutoSize = true;
+            radioNam.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            radioNam.Location = new Point(152, 230);
+            radioNam.Name = "radioNam";
+            radioNam.Size = new Size(76, 32);
+            radioNam.TabIndex = 19;
+            radioNam.TabStop = true;
+            radioNam.Text = "Nam";
+            radioNam.UseVisualStyleBackColor = true;
+            // 
+            // radioNu
+            // 
+            radioNu.AutoSize = true;
+            radioNu.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            radioNu.Location = new Point(245, 230);
+            radioNu.Name = "radioNu";
+            radioNu.Size = new Size(60, 32);
+            radioNu.TabIndex = 20;
+            radioNu.TabStop = true;
+            radioNu.Text = "Nữ";
+            radioNu.UseVisualStyleBackColor = true;
+            // 
             // frAuthor
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -544,7 +544,6 @@
         private Label label7;
         private CheckBox chkNu;
         private Label label6;
-        private CheckBox chkNam;
         private DateTimePicker dateTimePickerBirtday;
         private TextBox txtPhone;
         private Label label9;
@@ -569,5 +568,7 @@
         private DataGridViewTextBoxColumn CMND;
         private DataGridViewTextBoxColumn PenName;
         private Button btnHuy;
+        private RadioButton radioNam;
+        private RadioButton radioNu;
     }
 }

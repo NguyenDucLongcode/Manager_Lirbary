@@ -15,7 +15,6 @@ namespace qlDsSinhVien
         public string MaSach { get; set; }
         public string TenSach { get; set; }
         public string TheLoai { get; set; }
-        public string NhaXB { get; set; }
         public string NgayXB { get; set; }
         public string MaTacGia { get; set; }
         public string GiaTien { get; set; }
@@ -68,7 +67,6 @@ namespace qlDsSinhVien
             dt.Columns.Add("TenSach", typeof(string));
             dt.Columns.Add("TheLoai", typeof(string));
             dt.Columns.Add("NgayXB", typeof(string));
-            dt.Columns.Add("NhaXB", typeof(string));
             dt.Columns.Add("MaTacGia", typeof(string));
             dt.Columns.Add("GiaTien", typeof(string));
             foreach (var s in listbooks)

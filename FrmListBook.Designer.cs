@@ -50,11 +50,11 @@
             btnUpdate = new Button();
             btnCreate = new Button();
             groupBox3 = new GroupBox();
+            comboBoxMaTacGia = new ComboBox();
             comboBoxTheLoai = new ComboBox();
             label11 = new Label();
             txtGiaTien = new TextBox();
             label9 = new Label();
-            txtMaTacGia = new TextBox();
             label8 = new Label();
             dateTimePickerBook = new DateTimePicker();
             label7 = new Label();
@@ -281,11 +281,11 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(comboBoxMaTacGia);
             groupBox3.Controls.Add(comboBoxTheLoai);
             groupBox3.Controls.Add(label11);
             groupBox3.Controls.Add(txtGiaTien);
             groupBox3.Controls.Add(label9);
-            groupBox3.Controls.Add(txtMaTacGia);
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(dateTimePickerBook);
             groupBox3.Controls.Add(label7);
@@ -302,6 +302,15 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Thông tin sách";
             // 
+            // comboBoxMaTacGia
+            // 
+            comboBoxMaTacGia.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            comboBoxMaTacGia.FormattingEnabled = true;
+            comboBoxMaTacGia.Location = new Point(152, 292);
+            comboBoxMaTacGia.Name = "comboBoxMaTacGia";
+            comboBoxMaTacGia.Size = new Size(271, 31);
+            comboBoxMaTacGia.TabIndex = 20;
+            // 
             // comboBoxTheLoai
             // 
             comboBoxTheLoai.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -312,14 +321,6 @@
             comboBoxTheLoai.Name = "comboBoxTheLoai";
             comboBoxTheLoai.Size = new Size(272, 31);
             comboBoxTheLoai.TabIndex = 19;
-            // 
-            // txtTheLoai
-            // 
-            txtTheLoai.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtTheLoai.Location = new Point(152, 176);
-            txtTheLoai.Name = "txtTheLoai";
-            txtTheLoai.Size = new Size(271, 36);
-            txtTheLoai.TabIndex = 18;
             // 
             // label11
             // 
@@ -351,14 +352,6 @@
             label9.TabIndex = 13;
             label9.Text = "Giá Tiền";
             // 
-            // txtMaTacGia
-            // 
-            txtMaTacGia.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtMaTacGia.Location = new Point(151, 286);
-            txtMaTacGia.Name = "txtMaTacGia";
-            txtMaTacGia.Size = new Size(271, 36);
-            txtMaTacGia.TabIndex = 12;
-            // 
             // label8
             // 
             label8.AutoSize = true;
@@ -366,9 +359,9 @@
             label8.ForeColor = SystemColors.ActiveCaptionText;
             label8.Location = new Point(19, 295);
             label8.Name = "label8";
-            label8.Size = new Size(119, 30);
+            label8.Size = new Size(82, 30);
             label8.TabIndex = 11;
-            label8.Text = "Mã Tác Giả";
+            label8.Text = "Tác Giả";
             // 
             // dateTimePickerBook
             // 
@@ -466,7 +459,6 @@
         private DateTimePicker dateTimePickerBook;
         private TextBox txtGiaTien;
         private Label label9;
-        private TextBox txtMaTacGia;
         private Label label8;
         private TextBox txtTheLoai;
         private Label label11;
@@ -486,5 +478,6 @@
         private DataGridViewTextBoxColumn MaTacGia;
         private DataGridViewTextBoxColumn GiaTien;
         private ComboBox comboBoxTheLoai;
+        private ComboBox comboBoxMaTacGia;
     }
 }
