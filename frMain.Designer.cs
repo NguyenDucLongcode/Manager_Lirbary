@@ -32,7 +32,6 @@
             navbarSystem = new ToolStripMenuItem();
             itemLogin = new ToolStripMenuItem();
             itemLogout = new ToolStripMenuItem();
-            narbarDashboad = new ToolStripMenuItem();
             navbarBook = new ToolStripMenuItem();
             navbarAuthor = new ToolStripMenuItem();
             narbarReaders = new ToolStripMenuItem();
@@ -49,7 +48,7 @@
             // 
             menuStrip1.BackColor = SystemColors.ActiveCaption;
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { navbarSystem, narbarDashboad, navbarBook, navbarAuthor, narbarReaders, quảnLýMượnTrảToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { navbarSystem, navbarBook, navbarAuthor, narbarReaders, quảnLýMượnTrảToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1902, 45);
@@ -79,14 +78,6 @@
             itemLogout.Size = new Size(242, 42);
             itemLogout.Text = "Đăng xuất";
             itemLogout.Click += itemLogout_Click;
-            // 
-            // narbarDashboad
-            // 
-            narbarDashboad.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            narbarDashboad.Name = "narbarDashboad";
-            narbarDashboad.Size = new Size(163, 41);
-            narbarDashboad.Text = "Tổng quan";
-            narbarDashboad.Click += narbarDashboad_Click;
             // 
             // navbarBook
             // 
@@ -146,7 +137,7 @@
             itemsLogout.Name = "itemsLogout";
             itemsLogout.Size = new Size(224, 26);
             itemsLogout.Text = "Đăng xuẩt";
-            itemsLogout.Click += itemsLogout_Click;
+            //itemsLogout.Click += itemsLogout_Click;
             // 
             // panelMain
             // 
@@ -182,7 +173,6 @@
         private ToolStripMenuItem navbarBook;
         private ToolStripMenuItem navbarAuthor;
         private ToolStripMenuItem narbarReaders;
-        private ToolStripMenuItem narbarDashboad;
         private ToolStripMenuItem itemLogin;
         private ToolStripMenuItem itemLogout;
         private Panel panelMain;
