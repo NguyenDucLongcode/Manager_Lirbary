@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WinFormsApp1
@@ -21,6 +22,8 @@ namespace WinFormsApp1
             // Cấu hình DataGridView
             dgvMuonSach.AutoGenerateColumns = false;
             dgvMuonSach.Columns["MaSach"].DataPropertyName = "MaSach";
+            dgvMuonSach.Columns["MaDocGia"].DataPropertyName = "MaDocGia";
+            dgvMuonSach.Columns["HoTen"].DataPropertyName = "HoTen";
             dgvMuonSach.Columns["SoLuong"].DataPropertyName = "SoLuong";
             dgvMuonSach.Columns["NgayMuon"].DataPropertyName = "NgayMuon";
             dgvMuonSach.Columns["NgayTra"].DataPropertyName = "NgayTra";
@@ -66,9 +69,11 @@ namespace WinFormsApp1
                 }
                 else
                 {
-                    // Tìm kiếm không phân biệt hoa thường
+                    // Tìm kiếm không phân biệt hoa thường trên nhiều trường
                     var filtered = muonSaches.Where(m =>
-                        m.MaSach.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
+                        m.MaSach.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        m.MaDocGia.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        m.HoTen.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
                         .ToList();
 
                     dgvMuonSach.DataSource = null;
@@ -77,7 +82,7 @@ namespace WinFormsApp1
                     // Hiển thị thông báo nếu không tìm thấy
                     if (filtered.Count == 0)
                     {
-                        MessageBox.Show($"Không tìm thấy mã sách: {filterText}", "Thông báo",
+                        MessageBox.Show($"Không tìm thấy kết quả cho: {filterText}", "Thông báo",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -89,7 +94,7 @@ namespace WinFormsApp1
             }
         }
 
-        // SỰ KIỆN CLICK VÀO Ô TRONG BẢNG
+        // SỰ KIỆN CLICK VÀO Ô TRONG BẢNG - SỬA LỖI GÁN SAI
         private void dgvMuonSach_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < dgvMuonSach.Rows.Count)
@@ -98,6 +103,8 @@ namespace WinFormsApp1
 
                 DataGridViewRow selectedRow = dgvMuonSach.Rows[e.RowIndex];
                 SelectMuonSach.MaSach = selectedRow.Cells["MaSach"].Value?.ToString() ?? "";
+                SelectMuonSach.MaDocGia = selectedRow.Cells["MaDocGia"].Value?.ToString() ?? ""; // SỬA LỖI: Gán đúng MaDocGia
+                SelectMuonSach.HoTen = selectedRow.Cells["HoTen"].Value?.ToString() ?? ""; // SỬA LỖI: Gán đúng HoTen
                 SelectMuonSach.SoLuong = selectedRow.Cells["SoLuong"].Value?.ToString() ?? "";
                 SelectMuonSach.NgayMuon = selectedRow.Cells["NgayMuon"].Value?.ToString() ?? "";
                 SelectMuonSach.NgayTra = selectedRow.Cells["NgayTra"].Value?.ToString() ?? "";
@@ -110,13 +117,17 @@ namespace WinFormsApp1
         private void DisplaySelectedData()
         {
             txtMaSach.Text = SelectMuonSach.MaSach;
+            txtMaDocGia.Text = SelectMuonSach.MaDocGia; // THÊM: Hiển thị mã độc giả
+            txtHoTen.Text = SelectMuonSach.HoTen; // THÊM: Hiển thị họ tên
             txtSoLuong.Text = SelectMuonSach.SoLuong;
 
+            // Xử lý ngày mượn
             if (DateTime.TryParse(SelectMuonSach.NgayMuon, out DateTime ngayMuon))
                 dateTimePickerNgayMuon.Value = ngayMuon;
             else
                 dateTimePickerNgayMuon.Value = DateTime.Now;
 
+            // Xử lý ngày trả
             if (DateTime.TryParse(SelectMuonSach.NgayTra, out DateTime ngayTra))
                 dateTimePickerNgayTra.Value = ngayTra;
             else
@@ -126,6 +137,8 @@ namespace WinFormsApp1
         private void ClearMuonSachForm()
         {
             txtMaSach.Text = "";
+            txtMaDocGia.Text = ""; // THÊM: Xóa mã độc giả
+            txtHoTen.Text = ""; // THÊM: Xóa họ tên
             txtSoLuong.Text = "";
             dateTimePickerNgayMuon.Value = DateTime.Now;
             dateTimePickerNgayTra.Value = DateTime.Now.AddDays(7);
@@ -154,6 +167,8 @@ namespace WinFormsApp1
                 CreateMuonSach = new MuonSach
                 {
                     MaSach = txtMaSach.Text.Trim(),
+                    MaDocGia = txtMaDocGia.Text.Trim(),
+                    HoTen = txtHoTen.Text.Trim(),
                     SoLuong = txtSoLuong.Text.Trim(),
                     NgayMuon = dateTimePickerNgayMuon.Value.ToString("dd/MM/yyyy"),
                     NgayTra = dateTimePickerNgayTra.Value.ToString("dd/MM/yyyy")
@@ -205,6 +220,8 @@ namespace WinFormsApp1
                 if (confirm == DialogResult.Yes)
                 {
                     SelectMuonSach.MaSach = txtMaSach.Text.Trim();
+                    SelectMuonSach.MaDocGia = txtMaDocGia.Text.Trim();
+                    SelectMuonSach.HoTen = txtHoTen.Text.Trim();
                     SelectMuonSach.SoLuong = txtSoLuong.Text.Trim();
                     SelectMuonSach.NgayMuon = dateTimePickerNgayMuon.Value.ToString("dd/MM/yyyy");
                     SelectMuonSach.NgayTra = dateTimePickerNgayTra.Value.ToString("dd/MM/yyyy");
@@ -294,6 +311,8 @@ namespace WinFormsApp1
 
             string chiTiet = $"THÔNG TIN CHI TIẾT MƯỢN SÁCH\n\n" +
                            $"Mã sách: {SelectMuonSach.MaSach}\n" +
+                           $"Mã độc giả: {SelectMuonSach.MaDocGia}\n" +
+                           $"Họ tên: {SelectMuonSach.HoTen}\n" +
                            $"Số lượng: {SelectMuonSach.SoLuong}\n" +
                            $"Ngày mượn: {SelectMuonSach.NgayMuon}\n" +
                            $"Ngày trả: {SelectMuonSach.NgayTra}";
@@ -317,7 +336,7 @@ namespace WinFormsApp1
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // KIỂM TRA DỮ LIỆU NHẬP
+        // KIỂM TRA DỮ LIỆU NHẬP - THÊM VALIDATION CHO MÃ ĐỘC GIẢ VÀ HỌ TÊN
         private bool ValidateInput()
         {
             if (string.IsNullOrWhiteSpace(txtMaSach.Text))
@@ -325,6 +344,22 @@ namespace WinFormsApp1
                 MessageBox.Show("Mã sách không được để trống!", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtMaSach.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtMaDocGia.Text))
+            {
+                MessageBox.Show("Mã độc giả không được để trống!", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtMaDocGia.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtHoTen.Text))
+            {
+                MessageBox.Show("Họ tên không được để trống!", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtHoTen.Focus();
                 return false;
             }
 
