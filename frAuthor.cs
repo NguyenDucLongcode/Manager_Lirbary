@@ -15,8 +15,10 @@ namespace WinFormsApp1
     {
 
         List<Author> authorList = new List<Author>();
+        List<ListBook> booksByAuthor = new List<ListBook>();
         Author CreateAuthor = new Author();
         Author SelectedAuthor = new Author();
+
         int indexSelectedAuthor = -1; // Lưu chỉ số tác giả được chọn trong dgvAuthor
 
         public frAuthor()
@@ -25,8 +27,8 @@ namespace WinFormsApp1
         }
 
         private void frAuthor_Load(object sender, EventArgs e)
-        { 
-            if(ShareData.AuthorList.Count > 0)
+        {
+            if (ShareData.AuthorList.Count > 0)
             {
                 authorList = ShareData.AuthorList;
                 dgvAuthor.DataSource = authorList;       // Hiển thị lên DataGridView
@@ -37,6 +39,14 @@ namespace WinFormsApp1
                 authorList = author.GetList();           // Lấy danh sách mới
                 ShareData.AuthorList = authorList;       // Cập nhật vào vùng chia sẻ
                 dgvAuthor.DataSource = authorList;       // Hiển thị lên DataGridView
+
+            }
+
+            // nạp danh Book nếu chưa có
+            if (ShareData.bookList.Count == 0)
+            {
+                ListBook book = new ListBook();
+                ShareData.bookList = book.GetList();
 
             }
         }
@@ -52,6 +62,15 @@ namespace WinFormsApp1
             {
                 if (!row.IsNewRow)
                     row.Cells["SttAuthor"].Value = row.Index + 1;
+            }
+        }
+
+        private void dataGridViewBook_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            foreach (DataGridViewRow row in dataGridViewBook.Rows)
+            {
+                if (!row.IsNewRow)
+                    row.Cells["SttBook"].Value = row.Index + 1;
             }
         }
 
@@ -113,6 +132,33 @@ namespace WinFormsApp1
                 // Khóa input AuthorID ko cho sửa
                 txtAuthorId.ReadOnly = true;
 
+                // Hiển thị sách của tác giả được chọn
+
+                booksByAuthor = ShareData.bookList.Where(b => b.MaTacGia == SelectedAuthor.AuthorID).ToList();
+
+                dataGridViewBook.DataSource = booksByAuthor;
+            }
+        }
+
+        private void dataGridViewBook_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Kiểm tra không phải click vào header
+            if (e.RowIndex >= 0)
+            {
+                // Lấy dòng được chọn
+                DataGridViewRow selectedRow = dataGridViewBook.Rows[e.RowIndex];
+
+                // Lấy đối tượng Book từ DataSource
+                var selectedBook = selectedRow.DataBoundItem as ListBook; // Giả sử ListBook là lớp đại diện cho sách
+
+                if (selectedBook != null)
+                {
+                    ModalBook frInForBook = new ModalBook(selectedBook); // Truyền dữ liệu qua constructor
+                    if (frInForBook.ShowDialog() == DialogResult.OK)
+                    {
+                        // Xử lý sau khi form đóng (nếu cần)
+                    }
+                }
             }
         }
 
@@ -211,7 +257,7 @@ namespace WinFormsApp1
             CreateAuthor.PenName = FucString.FirstCapitalLetter(txtPenName.Text);
 
             // Giới tính
-   
+
             if (!radioNam.Checked && !radioNu.Checked)
             {
                 MessageBox.Show("Giới tính chưa được chọn", "Lỗi",
@@ -367,7 +413,7 @@ namespace WinFormsApp1
             SelectedAuthor.FullName = FucString.FirstCapitalLetter(txtName.Text);
 
             // Bút danh
-            
+
             if (txtPenName.Text == "")
             {
                 MessageBox.Show("Bút danh không được để trống", "Lỗi",
@@ -375,9 +421,9 @@ namespace WinFormsApp1
                 txtPenName.Focus();
                 return;
             }
-            
+
             // Kiểm tra bút danh có thay đổi hay ko 
-            if(FucString.FirstCapitalLetter(txtPenName.Text) != SelectedAuthor.PenName)
+            if (FucString.FirstCapitalLetter(txtPenName.Text) != SelectedAuthor.PenName)
             {
                 // Check trùng bút danh
                 if (authorList.Any(a => a.PenName.ToLower() == txtPenName.Text.ToLower()))
@@ -387,12 +433,12 @@ namespace WinFormsApp1
                     txtAuthorId.Focus();
                     return;
                 }
-            }    
-          
+            }
+
 
             SelectedAuthor.PenName = FucString.FirstCapitalLetter(txtPenName.Text);
 
-           
+
             // Giới tính
             if (!radioNam.Checked && !radioNu.Checked)
             {
@@ -530,7 +576,7 @@ namespace WinFormsApp1
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                   
+
                 // Cập nhập lại thông tin tại list Author
                 var existing = authorList.FirstOrDefault(s => s.AuthorID == SelectedAuthor.AuthorID);
                 if (existing == null)
@@ -600,13 +646,30 @@ namespace WinFormsApp1
                 var filtered = authorList.Where(s =>
                     s.AuthorID.ToLower().Contains(filterText) ||
                     s.FullName.ToLower().Contains(filterText) ||
-                    s.PenName.ToLower().Contains(filterText) 
-                  
+                    s.PenName.ToLower().Contains(filterText)
+
                 ).ToList();
 
                 dgvAuthor.DataSource = filtered;
             }
             dgvAuthor.Refresh();
+        }
+
+  
+
+        private void txtAuthorId_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox4_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

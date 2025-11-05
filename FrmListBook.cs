@@ -96,9 +96,17 @@ namespace WinFormsApp1
 
         private void LoadBookData()
         {
-            try
-            {
-                bookList = listBookHelper.GetList();
+            try 
+            { 
+                if(ShareData.bookList.Count > 0)
+                {
+                    bookList = ShareData.bookList;
+                }
+                else
+                {
+                    bookList = listBookHelper.GetList();
+                    ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
+                }
                 RefreshDataGrid();
             }
             catch (Exception ex)
@@ -289,6 +297,7 @@ namespace WinFormsApp1
 
                 // Thêm sách vào danh sách
                 bookList.Insert(0, createBook);
+                ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
                 RefreshDataGrid();
                 ClearForm();
             }
@@ -364,7 +373,7 @@ namespace WinFormsApp1
                     selectedBook.NgayXB = dateTimePickerBook.Value.ToString("yyyy-MM-dd");
 
                     selectedBook.GiaTien = gia.ToString();
-
+                    ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
                     RefreshDataGrid();
                     ClearForm();
                 }
@@ -398,6 +407,7 @@ namespace WinFormsApp1
                     if (bookToRemove != null)
                     {
                         bookList.Remove(bookToRemove);
+                        ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
                         RefreshDataGrid();
                         ClearForm();
                     }
