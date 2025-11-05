@@ -41,7 +41,7 @@
 
         private void narbarReaders_Click(object sender, EventArgs e)
         {
-
+            OpenFormInPanel(new FrmDocGia());
         }
 
         private void itemLogin_Click(object sender, EventArgs e)
