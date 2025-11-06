@@ -9,6 +9,8 @@ namespace WinFormsApp1
     public class MuonSach
     {
         public string MaSach { get; set; }
+        public string MaDocGia { get; set; }
+        public string HoTen { get; set; }
         public string SoLuong { get; set; }
         public string NgayMuon { get; set; }
         public string NgayTra { get; set; }
@@ -50,7 +52,7 @@ namespace WinFormsApp1
 
         public MuonSach()
         {
-            MaSach = SoLuong = NgayMuon = NgayTra = string.Empty;
+            MaSach = MaDocGia = HoTen = SoLuong = NgayMuon = NgayTra = string.Empty;
         }
 
         public MuonSach(string csvLine)
@@ -61,9 +63,11 @@ namespace WinFormsApp1
             string[] values = csvLine.Split(',');
 
             if (values.Length >= 1) MaSach = values[0];
-            if (values.Length >= 2) SoLuong = values[1];
-            if (values.Length >= 3) NgayMuon = values[2];
-            if (values.Length >= 4) NgayTra = values[3];
+            if (values.Length >= 2) MaDocGia = values[1];
+            if (values.Length >= 3) HoTen = values[2];
+            if (values.Length >= 4) SoLuong = values[3];
+            if (values.Length >= 5) NgayMuon = values[4];
+            if (values.Length >= 6) NgayTra = values[5];
         }
 
         /// <summary>
@@ -145,7 +149,7 @@ namespace WinFormsApp1
 
                 using (StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8))
                 {
-                    writer.WriteLine("MaSach,SoLuong,NgayMuon,NgayTra");
+                    writer.WriteLine("MaSach,MaDocGia,HoTen,SoLuong,NgayMuon,NgayTra");
 
                     foreach (var item in muonSachList)
                         writer.WriteLine(item.ToCsvString());
@@ -165,7 +169,7 @@ namespace WinFormsApp1
         /// </summary>
         public string ToCsvString()
         {
-            return $"{MaSach},{SoLuong},{NgayMuon},{NgayTra}";
+            return $"{MaSach},{MaDocGia},{HoTen},{SoLuong},{NgayMuon},{NgayTra}";
         }
 
         /// <summary>
