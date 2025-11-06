@@ -427,7 +427,6 @@
             // 
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
-            fileSystemWatcher1.Changed += fileSystemWatcher1_Changed;
             // 
             // FrmListBook
             // 

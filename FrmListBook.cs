@@ -9,61 +9,60 @@ namespace WinFormsApp1
 {
     public partial class FrmListBook : Form
     {
-        private List<ListBook> bookList = new List<ListBook>();
-        private ListBook selectedBook = null;
-        private ListBook createBook = new ListBook();
-        private ListBook listBookHelper = new ListBook();
-        private List<string> categories = new List<string>()
+        // ===== Biến lưu trữ chính =====
+        private List<ListBook> bookList = new List<ListBook>(); // Danh sách tất cả sách
+        private ListBook selectedBook = null;                  // Sách hiện đang được chọn
+        private ListBook createBook = new ListBook();          // Sách mới tạo để thêm
+        private ListBook listBookHelper = new ListBook();      // Hỗ trợ lấy danh sách sách từ file/nguồn khác
+        private List<string> categories = new List<string>()   // Danh sách thể loại có sẵn
         {
-        "Văn học", "Khoa học", "Lịch sử", "Triết học", "Tâm lý học",
-        "Kinh tế", "Kinh doanh", "Công nghệ thông tin", "Kỹ năng sống",
-        "Sách thiếu nhi", "Trinh thám", "Viễn tưởng", "Tiểu thuyết",
-        "Truyện ngắn", "Thơ", "Hồi ký", "Du ký", "Ẩm thực", "Nghệ thuật",
-        "Âm nhạc", "Y học", "Sức khỏe", "Thể thao", "Tôn giáo", "Chính trị"
+            "Văn học", "Khoa học", "Lịch sử", "Triết học", "Tâm lý học",
+            "Kinh tế", "Kinh doanh", "Công nghệ thông tin", "Kỹ năng sống",
+            "Sách thiếu nhi", "Trinh thám", "Viễn tưởng", "Tiểu thuyết",
+            "Truyện ngắn", "Thơ", "Hồi ký", "Du ký", "Ẩm thực", "Nghệ thuật",
+            "Âm nhạc", "Y học", "Sức khỏe", "Thể thao", "Tôn giáo", "Chính trị"
         };
 
-
-
-        private int selectedBookIndex = -1;
+        private int selectedBookIndex = -1; // Vị trí sách đang chọn trong danh sách
 
         public FrmListBook()
         {
             InitializeComponent();
-            dgvListBook.SelectionChanged += dgvListBook_SelectionChanged;
+            dgvListBook.SelectionChanged += dgvListBook_SelectionChanged; // Khi thay đổi dòng chọn trên DataGridView
         }
 
+        // ===== Khi Form Load =====
         private void FrmListBook_Load(object sender, EventArgs e)
         {
-            SetupDataGridView();
-            LoadBookData();
-            ClearForm();
+            SetupDataGridView(); // Cấu hình DataGridView
+            LoadBookData();      // Load dữ liệu sách từ ShareData hoặc file
+            ClearForm();         // Xóa dữ liệu nhập liệu trước đó
 
-            // nạp danh sách tác giả nếu chưa có
+            // Load danh sách tác giả nếu chưa có
             if (ShareData.AuthorList.Count == 0)
             {
                 Author author = new Author();
                 ShareData.AuthorList = author.GetList();
-
             }
 
-            // comboBox thể loại
-            comboBoxTheLoai.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Gợi ý và tự động hoàn thành
-            comboBoxTheLoai.AutoCompleteSource = AutoCompleteSource.ListItems; // Dùng chính danh sách DataSource
+            // ===== ComboBox thể loại =====
+            comboBoxTheLoai.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            comboBoxTheLoai.AutoCompleteSource = AutoCompleteSource.ListItems;
             comboBoxTheLoai.DataSource = categories;
             comboBoxTheLoai.SelectedIndex = -1;
             comboBoxTheLoai.Text = "Chọn thể loại...";
 
-            // comboBoxMaTacGia
-            comboBoxMaTacGia.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Gợi ý và tự động hoàn thành
-            comboBoxMaTacGia.AutoCompleteSource = AutoCompleteSource.ListItems; // Dùng chính danh sách DataSource
-            comboBoxMaTacGia.DisplayMember = "PenName";  // Hiển thị bút danh
-            comboBoxMaTacGia.ValueMember = "AuthorID";         // Lưu giá trị thật là ID
+            // ===== ComboBox tác giả =====
+            comboBoxMaTacGia.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            comboBoxMaTacGia.AutoCompleteSource = AutoCompleteSource.ListItems;
+            comboBoxMaTacGia.DisplayMember = "PenName";   // Hiển thị tên bút danh
+            comboBoxMaTacGia.ValueMember = "AuthorID";    // Giá trị thực chất là ID tác giả
             comboBoxMaTacGia.DataSource = ShareData.AuthorList;
             comboBoxMaTacGia.SelectedIndex = -1;
             comboBoxMaTacGia.Text = "Chọn tác giả...";
-
         }
 
+        // ===== Cấu hình DataGridView =====
         private void SetupDataGridView()
         {
             dgvListBook.Columns.Clear();
@@ -78,8 +77,8 @@ namespace WinFormsApp1
 
             dgvListBook.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvListBook.MultiSelect = false;
-
             dgvListBook.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
             dgvListBook.Columns["Stt"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvListBook.Columns["MaSach"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvListBook.Columns["MaTacGia"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -96,19 +95,19 @@ namespace WinFormsApp1
             dgvListBook.Columns["GiaTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
+        // ===== Load dữ liệu sách =====
         private void LoadBookData()
         {
             try
             {
                 if (ShareData.bookList.Count > 0)
-                {
                     bookList = ShareData.bookList;
-                }
                 else
                 {
                     bookList = listBookHelper.GetList();
-                    ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
+                    ShareData.bookList = bookList;
                 }
+
                 RefreshDataGrid();
             }
             catch (Exception ex)
@@ -118,6 +117,7 @@ namespace WinFormsApp1
             }
         }
 
+        // ===== Refresh DataGridView =====
         private void RefreshDataGrid()
         {
             dgvListBook.Rows.Clear();
@@ -134,31 +134,62 @@ namespace WinFormsApp1
                     book.MaTacGia,
                     FormatCurrency(book.GiaTien)
                 );
+
+                dgvListBook.Rows[dgvListBook.Rows.Count - 1].Tag = book;
             }
+
             dgvListBook.AutoResizeRows(DataGridViewAutoSizeRowsMode.AllCells);
         }
 
+        // ===== Khi chọn dòng trên DataGridView =====
         private void dgvListBook_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvListBook.SelectedRows.Count > 0)
             {
                 try
                 {
-                    int rowIndex = dgvListBook.SelectedRows[0].Index;
-                    if (rowIndex >= 0 && rowIndex < bookList.Count)
+                    var row = dgvListBook.SelectedRows[0];
+                    if (row == null) return;
+
+                    var bookFromTag = row.Tag as ListBook;
+                    if (bookFromTag != null)
                     {
-                        selectedBookIndex = rowIndex;
-                        selectedBook = bookList[rowIndex];
+                        selectedBook = bookFromTag;
+                        selectedBookIndex = bookList.FindIndex(b => b.MaSach == selectedBook.MaSach);
                         DisplaySelectedBook();
+                        return;
                     }
+
+                    var maSachCell = row.Cells["MaSach"].Value;
+                    if (maSachCell != null)
+                    {
+                        string maSach = maSachCell.ToString();
+                        int idx = bookList.FindIndex(b => string.Equals(b.MaSach, maSach, StringComparison.OrdinalIgnoreCase));
+                        if (idx >= 0)
+                        {
+                            selectedBookIndex = idx;
+                            selectedBook = bookList[idx];
+                            DisplaySelectedBook();
+                            return;
+                        }
+                    }
+
+                    selectedBook = null;
+                    selectedBookIndex = -1;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Lỗi khi chọn sách: {ex.Message}");
                 }
             }
+            else
+            {
+                selectedBook = null;
+                selectedBookIndex = -1;
+            }
         }
 
+        // ===== Hiển thị thông tin sách lên form =====
         private void DisplaySelectedBook()
         {
             if (selectedBook == null) return;
@@ -170,33 +201,17 @@ namespace WinFormsApp1
                 comboBoxMaTacGia.SelectedValue = selectedBook.MaTacGia;
                 comboBoxTheLoai.Text = selectedBook.TheLoai;
 
-
-                // Xử lý giá tiền
-                string giaTien = selectedBook.GiaTien;
-                if (long.TryParse(giaTien, out long gia))
-                {
+                if (long.TryParse(selectedBook.GiaTien, out long gia))
                     txtGiaTien.Text = gia.ToString();
-                }
                 else
                 {
-                    string cleanGia = giaTien.Replace(" VNĐ", "").Replace(".", "").Replace(" ", "").Replace(",", "");
-                    if (long.TryParse(cleanGia, out gia))
-                    {
-                        txtGiaTien.Text = gia.ToString();
-                    }
-                    else
-                    {
-                        txtGiaTien.Text = giaTien;
-                    }
+                    string cleanGia = selectedBook.GiaTien.Replace(" VNĐ", "").Replace(".", "").Replace(" ", "").Replace(",", "");
+                    txtGiaTien.Text = long.TryParse(cleanGia, out gia) ? gia.ToString() : selectedBook.GiaTien;
                 }
 
-                // Xử lý ngày xuất bản
                 if (DateTime.TryParse(selectedBook.NgayXB, out DateTime date))
-                {
                     dateTimePickerBook.Value = date;
-                }
 
-                // QUAN TRỌNG: Chỉ khóa mã sách khi đang chỉnh sửa
                 txtMaSach.ReadOnly = true;
             }
             catch (Exception ex)
@@ -205,48 +220,49 @@ namespace WinFormsApp1
             }
         }
 
+        // ===== Xóa form nhập liệu =====
         private void ClearForm()
         {
-            // QUAN TRỌNG: Phải mở khóa txtMaSach trước khi xóa
             txtMaSach.ReadOnly = false;
-
             txtMaSach.Text = "";
             txtTenSach.Text = "";
-            comboBoxMaTacGia.SelectedIndex = -1; // Reset comboBox Mã tác giả
-            comboBoxTheLoai.SelectedIndex = -1; // Reset comboBox Thể loại
+            comboBoxMaTacGia.SelectedIndex = -1;
+            comboBoxTheLoai.SelectedIndex = -1;
             txtGiaTien.Text = "";
             dateTimePickerBook.Value = DateTime.Now;
-
             selectedBook = null;
             selectedBookIndex = -1;
             dgvListBook.ClearSelection();
-            txtMaSach.Focus(); // Focus vào ô mã sách
+            txtMaSach.Focus();
         }
 
+        // ===== Thêm sách mới =====
         private void btnCreate_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate Mã sách
                 string maSach = txtMaSach.Text.Trim();
                 if (string.IsNullOrWhiteSpace(maSach))
                 {
-                    MessageBox.Show("Mã sách không được để trống", "Lỗi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Mã sách không được để trống", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtMaSach.Focus();
                     return;
                 }
 
-                // Check trùng mã sách
-                if (bookList.Any(b => b.MaSach.ToLower() == maSach.ToLower()))
+                if (bookList.Any(b => b.MaSach.Trim().ToLower() == maSach.ToLower()))
                 {
-                    MessageBox.Show("Mã sách đã tồn tại", "Lỗi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Mã sách đã tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtMaSach.Focus();
                     return;
                 }
 
-                // Validate các trường khác
+                if (bookList.Any(b => b.TenSach.Trim().ToLower() == txtTenSach.Text.Trim().ToLower()))
+                {
+                    MessageBox.Show("Tên sách đã tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtTenSach.Focus();
+                    return;
+                }
+
                 if (string.IsNullOrWhiteSpace(txtTenSach.Text))
                 {
                     MessageBox.Show("Tên sách không được để trống", "Lỗi");
@@ -254,39 +270,32 @@ namespace WinFormsApp1
                     return;
                 }
 
-                // validate thể loại
-                string selectedTheLoai = comboBoxTheLoai.Text; // hoặc comboBoxMaTacGia.Text
-
+                string selectedTheLoai = comboBoxTheLoai.Text;
                 if (string.IsNullOrWhiteSpace(selectedTheLoai) || selectedTheLoai == "Chọn thể loại...")
                 {
                     MessageBox.Show("Vui lòng chọn thể loại!");
                     return;
                 }
 
-                // Ngày sinh
-                DateTime birthDate = dateTimePickerBook.Value;
-                DateTime now = DateTime.Now;
-                if (birthDate > now)
+                if (dateTimePickerBook.Value > DateTime.Now)
                 {
                     MessageBox.Show("Ngày xuất bản không thể ở tương lai!");
+                    return;
                 }
 
-                // validate tác giả
                 if (comboBoxMaTacGia.SelectedIndex == -1 || comboBoxMaTacGia.Text == "Chọn tác giả...")
                 {
                     MessageBox.Show("Vui lòng chọn tác giả!");
                     return;
                 }
 
-                string giaTien = txtGiaTien.Text.Trim();
-                if (string.IsNullOrWhiteSpace(giaTien) || !long.TryParse(giaTien, out long gia) || gia < 0)
+                if (string.IsNullOrWhiteSpace(txtGiaTien.Text) || !long.TryParse(txtGiaTien.Text, out long gia) || gia < 0)
                 {
                     MessageBox.Show("Giá tiền phải là số hợp lệ và lớn hơn 0", "Lỗi");
                     txtGiaTien.Focus();
                     return;
                 }
 
-                // Tạo sách mới
                 createBook = new ListBook
                 {
                     MaSach = maSach.Trim().ToUpper(),
@@ -297,9 +306,8 @@ namespace WinFormsApp1
                     GiaTien = gia.ToString()
                 };
 
-                // Thêm sách vào danh sách
                 bookList.Insert(0, createBook);
-                ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
+                ShareData.bookList = bookList;
                 RefreshDataGrid();
                 ClearForm();
             }
@@ -309,6 +317,7 @@ namespace WinFormsApp1
             }
         }
 
+        // ===== Cập nhật sách =====
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             try
@@ -319,36 +328,30 @@ namespace WinFormsApp1
                     return;
                 }
 
-                // Validate các trường
-                if (string.IsNullOrWhiteSpace(txtTenSach.Text))
+                if (bookList.Any(b => b.TenSach.Trim().ToLower() == txtTenSach.Text.Trim().ToLower()
+                                      && b.MaSach != selectedBook.MaSach))
                 {
-                    MessageBox.Show("Tên sách không được để trống", "Lỗi");
+                    MessageBox.Show("Tên sách đã tồn tại", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtTenSach.Focus();
                     return;
                 }
 
-                // validate thể loại
-                string selectedTheLoai = comboBoxTheLoai.Text; // hoặc comboBoxMaTacGia.Text
-
+                string selectedTheLoai = comboBoxTheLoai.Text;
                 if (string.IsNullOrWhiteSpace(selectedTheLoai) || selectedTheLoai == "Chọn thể loại...")
                 {
-                    MessageBox.Show("Vui lòng chọn thể loại!");
+                    MessageBox.Show("Vui lòng chọn thể loại!", "Lỗi");
                     return;
                 }
 
-                // Ngày xuất bản
-                DateTime birthDate = dateTimePickerBook.Value;
-                DateTime now = DateTime.Now;
-                if (birthDate > now)
+                if (dateTimePickerBook.Value > DateTime.Now)
                 {
                     MessageBox.Show("Ngày xuất bản không thể ở tương lai!");
+                    return;
                 }
 
-
-                // validate tác giả
                 if (comboBoxMaTacGia.SelectedIndex == -1 || comboBoxMaTacGia.Text == "Chọn tác giả...")
                 {
-                    MessageBox.Show("Vui lòng chọn tác giả!");
+                    MessageBox.Show("Vui lòng chọn tác giả!", "Lỗi");
                     return;
                 }
 
@@ -359,7 +362,6 @@ namespace WinFormsApp1
                     return;
                 }
 
-                // Xác nhận cập nhật
                 DialogResult confirm = MessageBox.Show(
                     $"Bạn có chắc muốn cập nhật sách '{selectedBook.TenSach}' không?",
                     "Xác nhận cập nhật",
@@ -368,14 +370,13 @@ namespace WinFormsApp1
 
                 if (confirm == DialogResult.Yes)
                 {
-                    // Cập nhật thông tin
                     selectedBook.TenSach = txtTenSach.Text.Trim();
                     selectedBook.TheLoai = selectedTheLoai;
-                    selectedBook.MaTacGia = comboBoxMaTacGia.SelectedValue.ToString();
                     selectedBook.NgayXB = dateTimePickerBook.Value.ToString("yyyy-MM-dd");
+                    selectedBook.MaTacGia = comboBoxMaTacGia.SelectedValue.ToString();
+                    selectedBook.GiaTien = txtGiaTien.Text.Trim();
 
-                    selectedBook.GiaTien = gia.ToString();
-                    ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
+                    ShareData.bookList = bookList;
                     RefreshDataGrid();
                     ClearForm();
                 }
@@ -386,6 +387,7 @@ namespace WinFormsApp1
             }
         }
 
+        // ===== Xóa sách =====
         private void btnXoa_Click(object sender, EventArgs e)
         {
             try
@@ -396,7 +398,6 @@ namespace WinFormsApp1
                     return;
                 }
 
-                // Xác nhận xóa
                 DialogResult confirm = MessageBox.Show(
                     $"Bạn có CHẮC CHẮN muốn xóa sách '{selectedBook.TenSach}' không?\n\nHành động này không thể hoàn tác!",
                     "XÁC NHẬN XÓA",
@@ -405,14 +406,10 @@ namespace WinFormsApp1
 
                 if (confirm == DialogResult.Yes)
                 {
-                    var bookToRemove = bookList.FirstOrDefault(b => b.MaSach == selectedBook.MaSach);
-                    if (bookToRemove != null)
-                    {
-                        bookList.Remove(bookToRemove);
-                        ShareData.bookList = bookList; // Cập nhật lại vùng chia sẻ
-                        RefreshDataGrid();
-                        ClearForm();
-                    }
+                    bookList.Remove(selectedBook);
+                    ShareData.bookList = bookList;
+                    RefreshDataGrid();
+                    ClearForm();
                 }
             }
             catch (Exception ex)
@@ -454,11 +451,11 @@ namespace WinFormsApp1
                             book.MaSach,
                             book.TenSach,
                             book.TheLoai,
-
                             FormatDate(book.NgayXB),
                             book.MaTacGia,
                             FormatCurrency(book.GiaTien)
                         );
+                        dgvListBook.Rows[dgvListBook.Rows.Count - 1].Tag = book;
                     }
                     dgvListBook.AutoResizeRows(DataGridViewAutoSizeRowsMode.AllCells);
                 }
@@ -469,27 +466,19 @@ namespace WinFormsApp1
             }
         }
 
-        private void dgvListBook_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Không cần xử lý
-        }
+        private void dgvListBook_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
-        // Các phương thức helper
         private string FormatCurrency(string amount)
         {
             if (long.TryParse(amount, out long value))
-            {
                 return value.ToString("N0") + " VNĐ";
-            }
             return amount;
         }
 
         private string FormatDate(string dateString)
         {
             if (DateTime.TryParse(dateString, out DateTime date))
-            {
                 return date.ToString("dd/MM/yyyy");
-            }
             return dateString;
         }
 
@@ -505,13 +494,8 @@ namespace WinFormsApp1
             Author authorDetail = ShareData.AuthorList
                 .FirstOrDefault(a => a.AuthorID == selectedBook.MaTacGia);
 
-            ModalTacGia frInForTacGia = new ModalTacGia(authorDetail); // Truyền dữ liệu qua constructor
+            ModalTacGia frInForTacGia = new ModalTacGia(authorDetail);
             frInForTacGia.ShowDialog();
-        }
-
-        private void fileSystemWatcher1_Changed(object sender, FileSystemEventArgs e)
-        {
-
         }
     }
 }
