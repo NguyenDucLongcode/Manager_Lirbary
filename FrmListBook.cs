@@ -22,7 +22,7 @@ namespace WinFormsApp1
         "Âm nhạc", "Y học", "Sức khỏe", "Thể thao", "Tôn giáo", "Chính trị"
         };
 
-      
+
 
         private int selectedBookIndex = -1;
 
@@ -42,8 +42,8 @@ namespace WinFormsApp1
             if (ShareData.AuthorList.Count == 0)
             {
                 Author author = new Author();
-                ShareData.AuthorList = author.GetList();          
-              
+                ShareData.AuthorList = author.GetList();
+
             }
 
             // comboBox thể loại
@@ -54,6 +54,8 @@ namespace WinFormsApp1
             comboBoxTheLoai.Text = "Chọn thể loại...";
 
             // comboBoxMaTacGia
+            comboBoxMaTacGia.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Gợi ý và tự động hoàn thành
+            comboBoxMaTacGia.AutoCompleteSource = AutoCompleteSource.ListItems; // Dùng chính danh sách DataSource
             comboBoxMaTacGia.DisplayMember = "PenName";  // Hiển thị bút danh
             comboBoxMaTacGia.ValueMember = "AuthorID";         // Lưu giá trị thật là ID
             comboBoxMaTacGia.DataSource = ShareData.AuthorList;
@@ -96,9 +98,9 @@ namespace WinFormsApp1
 
         private void LoadBookData()
         {
-            try 
-            { 
-                if(ShareData.bookList.Count > 0)
+            try
+            {
+                if (ShareData.bookList.Count > 0)
                 {
                     bookList = ShareData.bookList;
                 }
@@ -167,7 +169,7 @@ namespace WinFormsApp1
                 txtTenSach.Text = selectedBook.TenSach;
                 comboBoxMaTacGia.SelectedValue = selectedBook.MaTacGia;
                 comboBoxTheLoai.Text = selectedBook.TheLoai;
-              
+
 
                 // Xử lý giá tiền
                 string giaTien = selectedBook.GiaTien;
@@ -275,7 +277,7 @@ namespace WinFormsApp1
                     MessageBox.Show("Vui lòng chọn tác giả!");
                     return;
                 }
-              
+
                 string giaTien = txtGiaTien.Text.Trim();
                 if (string.IsNullOrWhiteSpace(giaTien) || !long.TryParse(giaTien, out long gia) || gia < 0)
                 {
@@ -452,7 +454,7 @@ namespace WinFormsApp1
                             book.MaSach,
                             book.TenSach,
                             book.TheLoai,
-                       
+
                             FormatDate(book.NgayXB),
                             book.MaTacGia,
                             FormatCurrency(book.GiaTien)
@@ -491,7 +493,20 @@ namespace WinFormsApp1
             return dateString;
         }
 
+        private void btnTacGia_Click(object sender, EventArgs e)
+        {
+            if (selectedBook == null)
+            {
+                MessageBox.Show("Vui lòng chọn sách để xem thông tin tác giả", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-     
+            Author authorDetail = ShareData.AuthorList
+                .FirstOrDefault(a => a.AuthorID == selectedBook.MaTacGia);
+
+            ModalTacGia frInForTacGia = new ModalTacGia(authorDetail); // Truyền dữ liệu qua constructor
+            frInForTacGia.ShowDialog();
+        }
     }
 }

@@ -45,7 +45,7 @@
             groupBox2 = new GroupBox();
             groupBox4 = new GroupBox();
             btnHuy = new Button();
-            btnDetail = new Button();
+            btnTacGia = new Button();
             btnXoa = new Button();
             btnUpdate = new Button();
             btnCreate = new Button();
@@ -219,7 +219,7 @@
             // groupBox4
             // 
             groupBox4.Controls.Add(btnHuy);
-            groupBox4.Controls.Add(btnDetail);
+            groupBox4.Controls.Add(btnTacGia);
             groupBox4.Controls.Add(btnXoa);
             groupBox4.Controls.Add(btnUpdate);
             groupBox4.Controls.Add(btnCreate);
@@ -240,14 +240,15 @@
             btnHuy.UseVisualStyleBackColor = true;
             btnHuy.Click += btnHuy_Click;
             // 
-            // btnDetail
+            // btnTacGia
             // 
-            btnDetail.Location = new Point(94, 129);
-            btnDetail.Name = "btnDetail";
-            btnDetail.Size = new Size(103, 47);
-            btnDetail.TabIndex = 3;
-            btnDetail.Text = "Chi tiết";
-            btnDetail.UseVisualStyleBackColor = true;
+            btnTacGia.Location = new Point(94, 129);
+            btnTacGia.Name = "btnTacGia";
+            btnTacGia.Size = new Size(103, 47);
+            btnTacGia.TabIndex = 3;
+            btnTacGia.Text = "Tác giả";
+            btnTacGia.UseVisualStyleBackColor = true;
+            btnTacGia.Click += btnTacGia_Click;
             // 
             // btnXoa
             // 
@@ -463,7 +464,7 @@
         private TextBox txtTheLoai;
         private Label label11;
         private GroupBox groupBox4;
-        private Button btnDetail;
+        private Button btnTacGia;
         private Button btnXoa;
         private Button btnUpdate;
         private Button btnCreate;

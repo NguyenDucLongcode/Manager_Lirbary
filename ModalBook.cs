@@ -28,6 +28,9 @@ namespace WinFormsApp1
             txtGiaTien.Text = _book.GiaTien;
             txtGiaTien.ReadOnly = true;
 
+            txtTacGia.Text = _book.MaTacGia;
+            txtTacGia.ReadOnly = true;
+
             txtGiaTien.Text = _book.GiaTien;
             txtGiaTien.ReadOnly = true;
 
