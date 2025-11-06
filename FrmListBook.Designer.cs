@@ -62,12 +62,14 @@
             label5 = new Label();
             txtMaSach = new TextBox();
             label4 = new Label();
+            fileSystemWatcher1 = new FileSystemWatcher();
             tableLayoutPanel1.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvListBook).BeginInit();
             groupBox2.SuspendLayout();
             groupBox4.SuspendLayout();
             groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -421,6 +423,12 @@
             label4.TabIndex = 0;
             label4.Text = "Mã Sách";
             // 
+            // fileSystemWatcher1
+            // 
+            fileSystemWatcher1.EnableRaisingEvents = true;
+            fileSystemWatcher1.SynchronizingObject = this;
+            fileSystemWatcher1.Changed += fileSystemWatcher1_Changed;
+            // 
             // FrmListBook
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -438,6 +446,7 @@
             groupBox4.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             ResumeLayout(false);
         }
 
@@ -480,5 +489,6 @@
         private DataGridViewTextBoxColumn GiaTien;
         private ComboBox comboBoxTheLoai;
         private ComboBox comboBoxMaTacGia;
+        private FileSystemWatcher fileSystemWatcher1;
     }
 }

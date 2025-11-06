@@ -19,11 +19,29 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
+            // nạp danh sách độc giả nếu chưa có
+            if (ShareData.DocGiaList.Count == 0)
+            {
+                DocGia docGia = new DocGia();
+                ShareData.DocGiaList = docGia.GetList();
+
+            }
+
+            // nạp danh sách book nếu chưa có
+            if (ShareData.bookList.Count == 0)
+            {
+                ListBook book = new ListBook();
+                ShareData.bookList = book.GetList();
+            }
+
+            // Cấu hình ComboBox
+            ConfigComboBox();
+
+
             // Cấu hình DataGridView
             dgvMuonSach.AutoGenerateColumns = false;
             dgvMuonSach.Columns["MaSach"].DataPropertyName = "MaSach";
             dgvMuonSach.Columns["MaDocGia"].DataPropertyName = "MaDocGia";
-            dgvMuonSach.Columns["HoTen"].DataPropertyName = "HoTen";
             dgvMuonSach.Columns["SoLuong"].DataPropertyName = "SoLuong";
             dgvMuonSach.Columns["NgayMuon"].DataPropertyName = "NgayMuon";
             dgvMuonSach.Columns["NgayTra"].DataPropertyName = "NgayTra";
@@ -32,6 +50,38 @@ namespace WinFormsApp1
             txtTimKiem.TextChanged += new EventHandler(txtTimKiem_TextChanged);
 
             LoadData();
+        }
+
+        private void ConfigComboBox()
+        {
+
+            // Tạo danh sách mới với thông tin kết hợp
+            var displayList = ShareData.DocGiaList.Select(dg => new
+            {
+                MaDocGia = dg.MaDocGia,
+                DisplayText = $"{dg.HoTen} - {dg.CMND}",
+                OriginalItem = dg
+            }).ToList();
+
+            // comboBox  đọc giả
+            comboBoxMaDocGia.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Gợi ý và tự động hoàn thành
+            comboBoxMaDocGia.AutoCompleteSource = AutoCompleteSource.ListItems; // Dùng chính danh sách DataSource
+            comboBoxMaDocGia.DisplayMember = "DisplayText";  // Hiển thị tên + CCCD
+            comboBoxMaDocGia.ValueMember = "MaDocGia";         // Lưu giá trị thật là ID
+            comboBoxMaDocGia.DataSource = displayList;
+            comboBoxMaDocGia.SelectedIndex = -1;
+            comboBoxMaDocGia.Text = "Chọn độc giả...";
+
+
+            // comboBox  Tên sách
+            comboBoxMaSach.AutoCompleteMode = AutoCompleteMode.SuggestAppend; // Gợi ý và tự động hoàn thành
+            comboBoxMaSach.AutoCompleteSource = AutoCompleteSource.ListItems; // Dùng chính danh sách DataSource
+            comboBoxMaSach.DisplayMember = "TenSach";  // Hiển thị tên 
+            comboBoxMaSach.ValueMember = "MaSach";         // Lưu giá trị thật là ID
+            comboBoxMaSach.DataSource = ShareData.bookList;
+            comboBoxMaSach.SelectedIndex = -1;
+            comboBoxMaSach.Text = "Chọn sách...";
+
         }
 
         private void LoadData()
@@ -104,21 +154,22 @@ namespace WinFormsApp1
                 DataGridViewRow selectedRow = dgvMuonSach.Rows[e.RowIndex];
                 SelectMuonSach.MaSach = selectedRow.Cells["MaSach"].Value?.ToString() ?? "";
                 SelectMuonSach.MaDocGia = selectedRow.Cells["MaDocGia"].Value?.ToString() ?? ""; // SỬA LỖI: Gán đúng MaDocGia
-                SelectMuonSach.HoTen = selectedRow.Cells["HoTen"].Value?.ToString() ?? ""; // SỬA LỖI: Gán đúng HoTen
                 SelectMuonSach.SoLuong = selectedRow.Cells["SoLuong"].Value?.ToString() ?? "";
                 SelectMuonSach.NgayMuon = selectedRow.Cells["NgayMuon"].Value?.ToString() ?? "";
                 SelectMuonSach.NgayTra = selectedRow.Cells["NgayTra"].Value?.ToString() ?? "";
 
                 DisplaySelectedData();
-                txtMaSach.ReadOnly = true;
             }
         }
 
         private void DisplaySelectedData()
         {
-            txtMaSach.Text = SelectMuonSach.MaSach;
-            txtMaDocGia.Text = SelectMuonSach.MaDocGia; // THÊM: Hiển thị mã độc giả
-            txtHoTen.Text = SelectMuonSach.HoTen; // THÊM: Hiển thị họ tên
+
+            // Gán giá trị cho ComboBox và các điều khiển khác
+            comboBoxMaSach.SelectedValue = SelectMuonSach.MaSach;
+            comboBoxMaDocGia.SelectedValue = SelectMuonSach.MaDocGia;
+
+            // Gán giá trị cho TextBox và DateTimePicker
             txtSoLuong.Text = SelectMuonSach.SoLuong;
 
             // Xử lý ngày mượn
@@ -136,16 +187,13 @@ namespace WinFormsApp1
 
         private void ClearMuonSachForm()
         {
-            txtMaSach.Text = "";
-            txtMaDocGia.Text = ""; // THÊM: Xóa mã độc giả
-            txtHoTen.Text = ""; // THÊM: Xóa họ tên
             txtSoLuong.Text = "";
             dateTimePickerNgayMuon.Value = DateTime.Now;
             dateTimePickerNgayTra.Value = DateTime.Now.AddDays(7);
-            txtMaSach.ReadOnly = false;
+            comboBoxMaSach.SelectedIndex = -1;
+            comboBoxMaDocGia.SelectedIndex = -1;
             indexSelectMuonSach = -1;
             SelectMuonSach = new MuonSach();
-            txtMaSach.Focus();
         }
 
         // NÚT THÊM
@@ -156,19 +204,10 @@ namespace WinFormsApp1
                 if (!ValidateInput())
                     return;
 
-                if (new MuonSach().IsMaSachExists(muonSaches, txtMaSach.Text.Trim()))
-                {
-                    MessageBox.Show("Mã sách đã tồn tại!", "Lỗi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    txtMaSach.Focus();
-                    return;
-                }
-
                 CreateMuonSach = new MuonSach
                 {
-                    MaSach = txtMaSach.Text.Trim(),
-                    MaDocGia = txtMaDocGia.Text.Trim(),
-                    HoTen = txtHoTen.Text.Trim(),
+                    MaSach = comboBoxMaSach.SelectedValue.ToString(),
+                    MaDocGia = comboBoxMaDocGia.SelectedValue.ToString(),
                     SoLuong = txtSoLuong.Text.Trim(),
                     NgayMuon = dateTimePickerNgayMuon.Value.ToString("dd/MM/yyyy"),
                     NgayTra = dateTimePickerNgayTra.Value.ToString("dd/MM/yyyy")
@@ -219,9 +258,9 @@ namespace WinFormsApp1
 
                 if (confirm == DialogResult.Yes)
                 {
-                    SelectMuonSach.MaSach = txtMaSach.Text.Trim();
-                    SelectMuonSach.MaDocGia = txtMaDocGia.Text.Trim();
-                    SelectMuonSach.HoTen = txtHoTen.Text.Trim();
+                    SelectMuonSach.MaSach = comboBoxMaSach.SelectedValue.ToString();
+                    SelectMuonSach.MaDocGia = comboBoxMaDocGia.SelectedValue.ToString();
+
                     SelectMuonSach.SoLuong = txtSoLuong.Text.Trim();
                     SelectMuonSach.NgayMuon = dateTimePickerNgayMuon.Value.ToString("dd/MM/yyyy");
                     SelectMuonSach.NgayTra = dateTimePickerNgayTra.Value.ToString("dd/MM/yyyy");
@@ -309,10 +348,14 @@ namespace WinFormsApp1
                 return;
             }
 
+            string Tensach = ShareData.bookList
+                .FirstOrDefault(b => b.MaSach == SelectMuonSach.MaSach)?.TenSach ?? "N/A";
+
+            string TenDocGia = ShareData.DocGiaList.FirstOrDefault(b => b.MaDocGia == SelectMuonSach.MaDocGia)?.HoTen ?? "N/A";
+
             string chiTiet = $"THÔNG TIN CHI TIẾT MƯỢN SÁCH\n\n" +
-                           $"Mã sách: {SelectMuonSach.MaSach}\n" +
-                           $"Mã độc giả: {SelectMuonSach.MaDocGia}\n" +
-                           $"Họ tên: {SelectMuonSach.HoTen}\n" +
+                           $"Tên sách: {Tensach}\n" +
+                           $"Mã độc giả: {TenDocGia}\n" +
                            $"Số lượng: {SelectMuonSach.SoLuong}\n" +
                            $"Ngày mượn: {SelectMuonSach.NgayMuon}\n" +
                            $"Ngày trả: {SelectMuonSach.NgayTra}";
@@ -339,29 +382,23 @@ namespace WinFormsApp1
         // KIỂM TRA DỮ LIỆU NHẬP - THÊM VALIDATION CHO MÃ ĐỘC GIẢ VÀ HỌ TÊN
         private bool ValidateInput()
         {
-            if (string.IsNullOrWhiteSpace(txtMaSach.Text))
+            if (comboBoxMaDocGia.SelectedIndex == -1)
             {
-                MessageBox.Show("Mã sách không được để trống!", "Lỗi",
+                MessageBox.Show("Vui lòng chọn độc giả!", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtMaSach.Focus();
+                comboBoxMaDocGia.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtMaDocGia.Text))
+            if (comboBoxMaSach.SelectedIndex == -1)
             {
-                MessageBox.Show("Mã độc giả không được để trống!", "Lỗi",
+                MessageBox.Show("Vui lòng chọn sách!", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtMaDocGia.Focus();
+                comboBoxMaDocGia.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtHoTen.Text))
-            {
-                MessageBox.Show("Họ tên không được để trống!", "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtHoTen.Focus();
-                return false;
-            }
+
 
             if (string.IsNullOrWhiteSpace(txtSoLuong.Text))
             {
@@ -412,6 +449,20 @@ namespace WinFormsApp1
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void FrmMuonSach_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvMuonSach_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            foreach (DataGridViewRow row in dgvMuonSach.Rows)
+            {
+                if (!row.IsNewRow)
+                    row.Cells["SttMuonSach"].Value = row.Index + 1;
+            }
         }
     }
 }

@@ -10,13 +10,11 @@ namespace qlDsSinhVien
     {
 
         public static string AuthorFileName { get; } = @"Data\Author.csv";
-<<<<<<< Updated upstream
-=======
+
         public static string ListBookFileName  { get; } = @"Data\ListBook.csv";
 
         public static string MuonSachFileName { get; } = @"Data\MuonSach.csv";
         public static string DocGiaFileName { get; } = @"Data\DocGia.csv";
 
->>>>>>> Stashed changes
     }
 }

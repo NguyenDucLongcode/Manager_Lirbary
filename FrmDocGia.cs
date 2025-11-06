@@ -358,5 +358,9 @@ namespace WinFormsApp1
             return true;
         }
 
+        private void FrmDocGia_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

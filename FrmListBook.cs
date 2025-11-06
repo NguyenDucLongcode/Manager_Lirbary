@@ -508,5 +508,10 @@ namespace WinFormsApp1
             ModalTacGia frInForTacGia = new ModalTacGia(authorDetail); // Truyền dữ liệu qua constructor
             frInForTacGia.ShowDialog();
         }
+
+        private void fileSystemWatcher1_Changed(object sender, FileSystemEventArgs e)
+        {
+
+        }
     }
 }
