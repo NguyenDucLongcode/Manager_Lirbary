@@ -6,7 +6,7 @@
         public frMain()
         {
             InitializeComponent();
-            //CheckLogin(); // Gọi kiểm tra đăng nhập ngay khi khởi tạo form
+            CheckLogin(); // Gọi kiểm tra đăng nhập ngay khi khởi tạo form
 
         }
 
