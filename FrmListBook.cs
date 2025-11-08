@@ -145,11 +145,22 @@ namespace WinFormsApp1
                 try
                 {
                     int rowIndex = dgvListBook.SelectedRows[0].Index;
-                    if (rowIndex >= 0 && rowIndex < bookList.Count)
+                    if (rowIndex >= 0 && rowIndex < dgvListBook.Rows.Count)
                     {
-                        selectedBookIndex = rowIndex;
-                        selectedBook = bookList[rowIndex];
-                        DisplaySelectedBook();
+                        // Lấy mã sách từ DataGridView
+                        string maSach = dgvListBook.Rows[rowIndex].Cells["MaSach"].Value?.ToString();
+
+                        if (!string.IsNullOrEmpty(maSach))
+                        {
+                            // Tìm sách trong danh sách gốc bằng mã sách
+                            selectedBook = bookList.FirstOrDefault(b => b.MaSach == maSach);
+                            selectedBookIndex = bookList.IndexOf(selectedBook);
+
+                            if (selectedBook != null)
+                            {
+                                DisplaySelectedBook();
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -158,7 +169,6 @@ namespace WinFormsApp1
                 }
             }
         }
-
         private void DisplaySelectedBook()
         {
             if (selectedBook == null) return;
@@ -207,20 +217,20 @@ namespace WinFormsApp1
 
         private void ClearForm()
         {
-            // QUAN TRỌNG: Phải mở khóa txtMaSach trước khi xóa
             txtMaSach.ReadOnly = false;
-
             txtMaSach.Text = "";
             txtTenSach.Text = "";
-            comboBoxMaTacGia.SelectedIndex = -1; // Reset comboBox Mã tác giả
-            comboBoxTheLoai.SelectedIndex = -1; // Reset comboBox Thể loại
+            comboBoxMaTacGia.SelectedIndex = -1;
+            comboBoxTheLoai.SelectedIndex = -1;
+            comboBoxTheLoai.Text = "Chọn thể loại...";
+            comboBoxMaTacGia.Text = "Chọn tác giả...";
             txtGiaTien.Text = "";
             dateTimePickerBook.Value = DateTime.Now;
 
             selectedBook = null;
             selectedBookIndex = -1;
             dgvListBook.ClearSelection();
-            txtMaSach.Focus(); // Focus vào ô mã sách
+            txtMaSach.Focus();
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
@@ -426,11 +436,19 @@ namespace WinFormsApp1
             ClearForm();
         }
 
+
+
         private void txtFilter_TextChanged(object sender, EventArgs e)
         {
             try
             {
                 string filterText = txtFilter.Text.Trim().ToLower();
+
+                // Clear selection trước khi filter
+                dgvListBook.ClearSelection();
+                selectedBook = null;
+                selectedBookIndex = -1;
+
                 if (string.IsNullOrEmpty(filterText))
                 {
                     RefreshDataGrid();
@@ -454,7 +472,6 @@ namespace WinFormsApp1
                             book.MaSach,
                             book.TenSach,
                             book.TheLoai,
-
                             FormatDate(book.NgayXB),
                             book.MaTacGia,
                             FormatCurrency(book.GiaTien)
