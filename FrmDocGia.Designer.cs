@@ -500,7 +500,7 @@
             Margin = new Padding(2, 2, 2, 2);
             Name = "FrmDocGia";
             Text = "FrmDocGia";
-            Load += FrmDocGia_Load;
+            //Load += FrmDocGia_Load;
             grbTTDocGia.ResumeLayout(false);
             grbTTDocGia.PerformLayout();
             grbTimKiem.ResumeLayout(false);
