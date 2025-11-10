@@ -24,6 +24,9 @@ namespace WinFormsApp1
         private void LoadAuthorData()
         {
             // Hiển thị thông tin sách lên controls và set cho nó ko đc thay đổi giá trị
+            txtAuthorId.Text = _author.AuthorID;
+            txtAuthorId.ReadOnly = true;
+
             txtAddress.Text = _author.Address;
             txtAddress.ReadOnly = true;
 

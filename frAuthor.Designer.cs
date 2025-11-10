@@ -35,15 +35,6 @@
             txtFilter = new TextBox();
             label1 = new Label();
             dgvAuthor = new DataGridView();
-            SttAuthor = new DataGridViewTextBoxColumn();
-            AuthorID = new DataGridViewTextBoxColumn();
-            FullName = new DataGridViewTextBoxColumn();
-            Gender = new DataGridViewTextBoxColumn();
-            BirthDate = new DataGridViewTextBoxColumn();
-            Address = new DataGridViewTextBoxColumn();
-            PhoneNumber = new DataGridViewTextBoxColumn();
-            CMND = new DataGridViewTextBoxColumn();
-            PenName = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
             groupBox4 = new GroupBox();
             btnHuy = new Button();
@@ -77,6 +68,15 @@
             NgayXB = new DataGridViewTextBoxColumn();
             MaTacGia = new DataGridViewTextBoxColumn();
             TheLoai = new DataGridViewTextBoxColumn();
+            SttAuthor = new DataGridViewTextBoxColumn();
+            AuthorID = new DataGridViewTextBoxColumn();
+            FullName = new DataGridViewTextBoxColumn();
+            Gender = new DataGridViewTextBoxColumn();
+            BirthDate = new DataGridViewTextBoxColumn();
+            Address = new DataGridViewTextBoxColumn();
+            PhoneNumber = new DataGridViewTextBoxColumn();
+            CMND = new DataGridViewTextBoxColumn();
+            PenName = new DataGridViewTextBoxColumn();
             tableLayoutPanel1.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAuthor).BeginInit();
@@ -176,77 +176,6 @@
             dgvAuthor.TabIndex = 2;
             dgvAuthor.CellContentClick += dgvAuthor_CellContentClick;
             dgvAuthor.DataBindingComplete += dgvAuthor_DataBindingComplete;
-            // 
-            // SttAuthor
-            // 
-            SttAuthor.HeaderText = "Stt";
-            SttAuthor.MinimumWidth = 6;
-            SttAuthor.Name = "SttAuthor";
-            SttAuthor.Width = 50;
-            // 
-            // AuthorID
-            // 
-            AuthorID.DataPropertyName = "AuthorID";
-            AuthorID.HeaderText = "Mã độc gả";
-            AuthorID.MinimumWidth = 6;
-            AuthorID.Name = "AuthorID";
-            AuthorID.Width = 110;
-            // 
-            // FullName
-            // 
-            FullName.DataPropertyName = "FullName";
-            FullName.HeaderText = "Họ tên";
-            FullName.MinimumWidth = 6;
-            FullName.Name = "FullName";
-            FullName.Width = 150;
-            // 
-            // Gender
-            // 
-            Gender.DataPropertyName = "Gender";
-            Gender.HeaderText = "Giới tính";
-            Gender.MinimumWidth = 6;
-            Gender.Name = "Gender";
-            Gender.Width = 125;
-            // 
-            // BirthDate
-            // 
-            BirthDate.DataPropertyName = "BirthDate";
-            BirthDate.HeaderText = "Ngày sinh";
-            BirthDate.MinimumWidth = 6;
-            BirthDate.Name = "BirthDate";
-            BirthDate.Width = 125;
-            // 
-            // Address
-            // 
-            Address.DataPropertyName = "Address";
-            Address.HeaderText = "Địa chỉ";
-            Address.MinimumWidth = 6;
-            Address.Name = "Address";
-            Address.Width = 130;
-            // 
-            // PhoneNumber
-            // 
-            PhoneNumber.DataPropertyName = "PhoneNumber";
-            PhoneNumber.HeaderText = "Số diện thoại";
-            PhoneNumber.MinimumWidth = 6;
-            PhoneNumber.Name = "PhoneNumber";
-            PhoneNumber.Width = 125;
-            // 
-            // CMND
-            // 
-            CMND.DataPropertyName = "CMND";
-            CMND.HeaderText = "CMND";
-            CMND.MinimumWidth = 6;
-            CMND.Name = "CMND";
-            CMND.Width = 125;
-            // 
-            // PenName
-            // 
-            PenName.DataPropertyName = "PenName";
-            PenName.HeaderText = "Bút danh";
-            PenName.MinimumWidth = 6;
-            PenName.Name = "PenName";
-            PenName.Width = 120;
             // 
             // groupBox2
             // 
@@ -588,6 +517,77 @@
             TheLoai.Name = "TheLoai";
             TheLoai.Width = 125;
             // 
+            // SttAuthor
+            // 
+            SttAuthor.HeaderText = "Stt";
+            SttAuthor.MinimumWidth = 6;
+            SttAuthor.Name = "SttAuthor";
+            SttAuthor.Width = 50;
+            // 
+            // AuthorID
+            // 
+            AuthorID.DataPropertyName = "AuthorID";
+            AuthorID.HeaderText = "Mã tác gả";
+            AuthorID.MinimumWidth = 6;
+            AuthorID.Name = "AuthorID";
+            AuthorID.Width = 110;
+            // 
+            // FullName
+            // 
+            FullName.DataPropertyName = "FullName";
+            FullName.HeaderText = "Họ tên";
+            FullName.MinimumWidth = 6;
+            FullName.Name = "FullName";
+            FullName.Width = 150;
+            // 
+            // Gender
+            // 
+            Gender.DataPropertyName = "Gender";
+            Gender.HeaderText = "Giới tính";
+            Gender.MinimumWidth = 6;
+            Gender.Name = "Gender";
+            Gender.Width = 125;
+            // 
+            // BirthDate
+            // 
+            BirthDate.DataPropertyName = "BirthDate";
+            BirthDate.HeaderText = "Ngày sinh";
+            BirthDate.MinimumWidth = 6;
+            BirthDate.Name = "BirthDate";
+            BirthDate.Width = 125;
+            // 
+            // Address
+            // 
+            Address.DataPropertyName = "Address";
+            Address.HeaderText = "Địa chỉ";
+            Address.MinimumWidth = 6;
+            Address.Name = "Address";
+            Address.Width = 130;
+            // 
+            // PhoneNumber
+            // 
+            PhoneNumber.DataPropertyName = "PhoneNumber";
+            PhoneNumber.HeaderText = "Số diện thoại";
+            PhoneNumber.MinimumWidth = 6;
+            PhoneNumber.Name = "PhoneNumber";
+            PhoneNumber.Width = 125;
+            // 
+            // CMND
+            // 
+            CMND.DataPropertyName = "CMND";
+            CMND.HeaderText = "CMND";
+            CMND.MinimumWidth = 6;
+            CMND.Name = "CMND";
+            CMND.Width = 125;
+            // 
+            // PenName
+            // 
+            PenName.DataPropertyName = "PenName";
+            PenName.HeaderText = "Bút danh";
+            PenName.MinimumWidth = 6;
+            PenName.Name = "PenName";
+            PenName.Width = 120;
+            // 
             // frAuthor
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -620,15 +620,6 @@
         private Label label1;
         private CheckBox chkNu;
         private DataGridView dgvAuthor;
-        private DataGridViewTextBoxColumn SttAuthor;
-        private DataGridViewTextBoxColumn AuthorID;
-        private DataGridViewTextBoxColumn FullName;
-        private DataGridViewTextBoxColumn Gender;
-        private DataGridViewTextBoxColumn BirthDate;
-        private DataGridViewTextBoxColumn Address;
-        private DataGridViewTextBoxColumn PhoneNumber;
-        private DataGridViewTextBoxColumn CMND;
-        private DataGridViewTextBoxColumn PenName;
         private GroupBox groupBox2;
         private GroupBox groupBox4;
         private Button btnHuy;
@@ -662,5 +653,14 @@
         private DataGridViewTextBoxColumn NgayXB;
         private DataGridViewTextBoxColumn MaTacGia;
         private DataGridViewTextBoxColumn TheLoai;
+        private DataGridViewTextBoxColumn SttAuthor;
+        private DataGridViewTextBoxColumn AuthorID;
+        private DataGridViewTextBoxColumn FullName;
+        private DataGridViewTextBoxColumn Gender;
+        private DataGridViewTextBoxColumn BirthDate;
+        private DataGridViewTextBoxColumn Address;
+        private DataGridViewTextBoxColumn PhoneNumber;
+        private DataGridViewTextBoxColumn CMND;
+        private DataGridViewTextBoxColumn PenName;
     }
 }
