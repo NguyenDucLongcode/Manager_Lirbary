@@ -155,5 +155,9 @@
         {
 
         }
+        private void trảSáchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFormInPanel(new FrmTraSach());
+        }
     }
 }
