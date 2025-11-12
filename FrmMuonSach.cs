@@ -90,6 +90,7 @@ namespace WinFormsApp1
             {
                 MuonSach muonSach = new MuonSach();
                 muonSaches = muonSach.GetList();
+                ShareData.MuonSachList = muonSaches;
 
                 // CẬP NHẬT LẠI DATASOURCE
                 dgvMuonSach.DataSource = null;
@@ -220,6 +221,7 @@ namespace WinFormsApp1
                     // CẬP NHẬT LẠI DATASOURCE SAU KHI THÊM
                     dgvMuonSach.DataSource = null;
                     dgvMuonSach.DataSource = muonSaches;
+                    ShareData.MuonSachList = muonSaches;
 
                     ClearMuonSachForm();
                     MessageBox.Show("Thêm mượn sách thành công!", "Thành công",
@@ -276,6 +278,8 @@ namespace WinFormsApp1
                         // CẬP NHẬT LẠI DATASOURCE SAU KHI SỬA
                         dgvMuonSach.DataSource = null;
                         dgvMuonSach.DataSource = muonSaches;
+                       ShareData.MuonSachList = muonSaches;
+
 
                         ClearMuonSachForm();
                         MessageBox.Show("Cập nhật thành công!", "Thành công",
@@ -319,6 +323,8 @@ namespace WinFormsApp1
                         // CẬP NHẬT LẠI DATASOURCE SAU KHI XÓA
                         dgvMuonSach.DataSource = null;
                         dgvMuonSach.DataSource = muonSaches;
+                        ShareData.MuonSachList = muonSaches;
+
 
                         ClearMuonSachForm();
                         MessageBox.Show("Xóa thành công!", "Thành công",
