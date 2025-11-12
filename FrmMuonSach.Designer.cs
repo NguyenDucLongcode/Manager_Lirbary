@@ -46,6 +46,12 @@
             txtTimKiem = new TextBox();
             label1 = new Label();
             dgvMuonSach = new DataGridView();
+            SttMuonSach = new DataGridViewTextBoxColumn();
+            MaSach = new DataGridViewTextBoxColumn();
+            MaDocGia = new DataGridViewTextBoxColumn();
+            SoLuong = new DataGridViewTextBoxColumn();
+            NgayMuon = new DataGridViewTextBoxColumn();
+            NgayTra = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
             groupBox4 = new GroupBox();
             btnHuy = new Button();
@@ -53,12 +59,6 @@
             btnXoa = new Button();
             btnUpdate = new Button();
             btnCreate = new Button();
-            SttMuonSach = new DataGridViewTextBoxColumn();
-            MaSach = new DataGridViewTextBoxColumn();
-            MaDocGia = new DataGridViewTextBoxColumn();
-            SoLuong = new DataGridViewTextBoxColumn();
-            NgayMuon = new DataGridViewTextBoxColumn();
-            NgayTra = new DataGridViewTextBoxColumn();
             groupBox3.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -70,6 +70,7 @@
             // dateTimePickerNgayTra
             // 
             dateTimePickerNgayTra.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePickerNgayTra.Format = DateTimePickerFormat.Short;
             dateTimePickerNgayTra.Location = new Point(154, 275);
             dateTimePickerNgayTra.Name = "dateTimePickerNgayTra";
             dateTimePickerNgayTra.Size = new Size(271, 34);
@@ -162,6 +163,7 @@
             // dateTimePickerNgayMuon
             // 
             dateTimePickerNgayMuon.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePickerNgayMuon.Format = DateTimePickerFormat.Short;
             dateTimePickerNgayMuon.Location = new Point(152, 223);
             dateTimePickerNgayMuon.Name = "dateTimePickerNgayMuon";
             dateTimePickerNgayMuon.Size = new Size(271, 34);
@@ -275,6 +277,52 @@
             dgvMuonSach.CellClick += dgvMuonSach_CellClick;
             dgvMuonSach.DataBindingComplete += dgvMuonSach_DataBindingComplete;
             // 
+            // SttMuonSach
+            // 
+            SttMuonSach.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            SttMuonSach.HeaderText = "STT";
+            SttMuonSach.MinimumWidth = 6;
+            SttMuonSach.Name = "SttMuonSach";
+            // 
+            // MaSach
+            // 
+            MaSach.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            MaSach.DataPropertyName = "MaSach";
+            MaSach.HeaderText = "Mã Sách";
+            MaSach.MinimumWidth = 6;
+            MaSach.Name = "MaSach";
+            // 
+            // MaDocGia
+            // 
+            MaDocGia.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            MaDocGia.HeaderText = "Mã Độc Giả";
+            MaDocGia.MinimumWidth = 6;
+            MaDocGia.Name = "MaDocGia";
+            // 
+            // SoLuong
+            // 
+            SoLuong.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            SoLuong.DataPropertyName = "SoLuong";
+            SoLuong.HeaderText = "Số Lượng";
+            SoLuong.MinimumWidth = 6;
+            SoLuong.Name = "SoLuong";
+            // 
+            // NgayMuon
+            // 
+            NgayMuon.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            NgayMuon.DataPropertyName = "NgayMuon";
+            NgayMuon.HeaderText = "Ngày Mượn";
+            NgayMuon.MinimumWidth = 6;
+            NgayMuon.Name = "NgayMuon";
+            // 
+            // NgayTra
+            // 
+            NgayTra.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            NgayTra.DataPropertyName = "NgayTra";
+            NgayTra.HeaderText = "Ngày Trả";
+            NgayTra.MinimumWidth = 6;
+            NgayTra.Name = "NgayTra";
+            // 
             // groupBox2
             // 
             groupBox2.Controls.Add(groupBox4);
@@ -349,52 +397,6 @@
             btnCreate.Text = "Thêm ";
             btnCreate.UseVisualStyleBackColor = true;
             btnCreate.Click += btnThem_Click;
-            // 
-            // SttMuonSach
-            // 
-            SttMuonSach.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            SttMuonSach.HeaderText = "STT";
-            SttMuonSach.MinimumWidth = 6;
-            SttMuonSach.Name = "SttMuonSach";
-            // 
-            // MaSach
-            // 
-            MaSach.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            MaSach.DataPropertyName = "MaSach";
-            MaSach.HeaderText = "Mã Sách";
-            MaSach.MinimumWidth = 6;
-            MaSach.Name = "MaSach";
-            // 
-            // MaDocGia
-            // 
-            MaDocGia.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            MaDocGia.HeaderText = "Mã Độc Giả";
-            MaDocGia.MinimumWidth = 6;
-            MaDocGia.Name = "MaDocGia";
-            // 
-            // SoLuong
-            // 
-            SoLuong.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            SoLuong.DataPropertyName = "SoLuong";
-            SoLuong.HeaderText = "Số Lượng";
-            SoLuong.MinimumWidth = 6;
-            SoLuong.Name = "SoLuong";
-            // 
-            // NgayMuon
-            // 
-            NgayMuon.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            NgayMuon.DataPropertyName = "NgayMuon";
-            NgayMuon.HeaderText = "Ngày Mượn";
-            NgayMuon.MinimumWidth = 6;
-            NgayMuon.Name = "NgayMuon";
-            // 
-            // NgayTra
-            // 
-            NgayTra.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            NgayTra.DataPropertyName = "NgayTra";
-            NgayTra.HeaderText = "Ngày Trả";
-            NgayTra.MinimumWidth = 6;
-            NgayTra.Name = "NgayTra";
             // 
             // FrmMuonSach
             // 

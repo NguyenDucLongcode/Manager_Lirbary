@@ -369,6 +369,7 @@
             // dateTimePickerBook
             // 
             dateTimePickerBook.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePickerBook.Format = DateTimePickerFormat.Short;
             dateTimePickerBook.Location = new Point(151, 234);
             dateTimePickerBook.Name = "dateTimePickerBook";
             dateTimePickerBook.Size = new Size(271, 34);
