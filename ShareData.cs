@@ -12,5 +12,7 @@ namespace WinFormsApp1
         public static List<Author> AuthorList { get; set; } = new List<Author>();
         public static List<ListBook> bookList { get; set; } = new List<ListBook>();
         public static List<DocGia> DocGiaList { get; set; } = new List<DocGia>();
+
+        public static List<MuonSach> MuonSachList { get; set; } = new List<MuonSach>();
     }
 }
