@@ -256,8 +256,8 @@
             // 
             checkBoxDungHan.AutoSize = true;
             checkBoxDungHan.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            checkBoxDungHan.ForeColor = Color.Green;
-            checkBoxDungHan.Location = new Point(450, 32);
+            checkBoxDungHan.ForeColor = Color.Blue;
+            checkBoxDungHan.Location = new Point(454, 32);
             checkBoxDungHan.Margin = new Padding(2);
             checkBoxDungHan.Name = "checkBoxDungHan";
             checkBoxDungHan.Size = new Size(178, 24);
@@ -270,8 +270,8 @@
             // 
             checkBoxTraSom.AutoSize = true;
             checkBoxTraSom.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            checkBoxTraSom.ForeColor = Color.Orange;
-            checkBoxTraSom.Location = new Point(281, 50);
+            checkBoxTraSom.ForeColor = Color.Blue;
+            checkBoxTraSom.Location = new Point(272, 65);
             checkBoxTraSom.Margin = new Padding(2);
             checkBoxTraSom.Name = "checkBoxTraSom";
             checkBoxTraSom.Size = new Size(174, 24);
@@ -284,8 +284,8 @@
             // 
             checkBoxTraTre.AutoSize = true;
             checkBoxTraTre.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            checkBoxTraTre.ForeColor = Color.Red;
-            checkBoxTraTre.Location = new Point(281, 22);
+            checkBoxTraTre.ForeColor = Color.Blue;
+            checkBoxTraTre.Location = new Point(272, 32);
             checkBoxTraTre.Margin = new Padding(2);
             checkBoxTraTre.Name = "checkBoxTraTre";
             checkBoxTraTre.Size = new Size(165, 24);
