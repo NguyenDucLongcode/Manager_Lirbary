@@ -10,9 +10,13 @@ namespace WinFormsApp1
     public partial class FrmTraSach : Form
     {
         List<TraSach> traSaches = new List<TraSach>();
+        List<MuonSach> muonSaches = new List<MuonSach>();
         TraSach CreateTraSach = new TraSach();
         TraSach SelectTraSach = new TraSach();
         int indexSelectTraSach = -1;
+        private bool isFilteringTraTre = false;
+        private bool isFilteringTraSom = false;
+        private bool isFilteringDungHan = false;
 
         public FrmTraSach()
         {
@@ -30,6 +34,9 @@ namespace WinFormsApp1
                 ShareData.bookList = book.GetList();
             }
 
+            // Load dữ liệu mượn sách
+            LoadMuonSachData();
+
             ConfigComboBox();
 
             dgvTraSach.AutoGenerateColumns = false;
@@ -38,10 +45,29 @@ namespace WinFormsApp1
             dgvTraSach.Columns["SoLuong"].DataPropertyName = "SoLuong";
             dgvTraSach.Columns["NgayTraDuKien"].DataPropertyName = "NgayTraDuKien";
             dgvTraSach.Columns["NgayTraThucTe"].DataPropertyName = "NgayTraThucTe";
+            dgvTraSach.Columns["TinhTrang"].DataPropertyName = "TinhTrang";
 
             txtTimKiem.TextChanged += new EventHandler(txtTimKiem_TextChanged);
 
+            // Thêm sự kiện cho combobox
+            comboBoxMaSach.SelectedIndexChanged += new EventHandler(ComboBox_SelectedIndexChanged);
+            comboBoxMaDocGia.SelectedIndexChanged += new EventHandler(ComboBox_SelectedIndexChanged);
+
             LoadData();
+        }
+
+        private void LoadMuonSachData()
+        {
+            try
+            {
+                MuonSach muonSach = new MuonSach();
+                muonSaches = muonSach.GetList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải dữ liệu mượn sách: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ConfigComboBox()
@@ -77,6 +103,12 @@ namespace WinFormsApp1
                 TraSach traSach = new TraSach();
                 traSaches = traSach.GetList();
 
+                // Cập nhật tình trạng cho từng bản ghi
+                foreach (var item in traSaches)
+                {
+                    item.TinhTrang = GetTinhTrangTraSach(item);
+                }
+
                 dgvTraSach.DataSource = null;
                 dgvTraSach.DataSource = traSaches;
 
@@ -89,40 +121,128 @@ namespace WinFormsApp1
             }
         }
 
-        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        private string GetTinhTrangTraSach(TraSach traSach)
         {
-            try
+            if (DateTime.TryParse(traSach.NgayTraThucTe, out DateTime ngayTraThucTe) &&
+                DateTime.TryParse(traSach.NgayTraDuKien, out DateTime ngayTraDuKien))
             {
-                string filterText = txtTimKiem.Text.Trim();
+                if (ngayTraThucTe > ngayTraDuKien)
+                    return "Trả trễ";
+                else if (ngayTraThucTe < ngayTraDuKien)
+                    return "Trả sớm";
+                else
+                    return "Đúng hạn";
+            }
+            return "Không xác định";
+        }
 
-                if (string.IsNullOrEmpty(filterText))
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateNgayTraDuKien();
+        }
+
+        private void UpdateNgayTraDuKien()
+        {
+            if (comboBoxMaSach.SelectedIndex != -1 && comboBoxMaDocGia.SelectedIndex != -1)
+            {
+                string maSach = comboBoxMaSach.SelectedValue.ToString();
+                string maDocGia = comboBoxMaDocGia.SelectedValue.ToString();
+
+                // Tìm thông tin mượn sách tương ứng
+                var muonSach = muonSaches.FirstOrDefault(m =>
+                    m.MaSach == maSach && m.MaDocGia == maDocGia);
+
+                if (muonSach != null && DateTime.TryParse(muonSach.NgayMuon, out DateTime ngayMuon))
                 {
-                    dgvTraSach.DataSource = null;
-                    dgvTraSach.DataSource = traSaches;
+                    dateTimePickerNgayMuon.Value = ngayMuon;
+
+                    // Tính ngày trả dự kiến (mặc định 14 ngày sau ngày mượn)
+                    DateTime ngayTraDuKien = ngayMuon.AddDays(14);
+                    dateTimePickerNgayTraDuKien.Value = ngayTraDuKien;
                 }
                 else
                 {
-                    var filtered = traSaches.Where(m =>
+                    // Nếu không tìm thấy, set ngày mượn là ngày hiện tại và ngày trả dự kiến +7 ngày
+                    dateTimePickerNgayMuon.Value = DateTime.Now;
+                    dateTimePickerNgayTraDuKien.Value = DateTime.Now.AddDays(7);
+                }
+            }
+        }
+
+        private void checkBoxTraTre_CheckedChanged(object sender, EventArgs e)
+        {
+            isFilteringTraTre = checkBoxTraTre.Checked;
+            ApplyFilters();
+        }
+        private void CheckBoxFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            isFilteringTraTre = checkBoxTraTre.Checked;
+            isFilteringTraSom = checkBoxTraSom.Checked;
+            isFilteringDungHan = checkBoxDungHan.Checked;
+            ApplyFilters();
+        }
+        private void ApplyFilters()
+        {
+            try
+            {
+                var filtered = traSaches.AsEnumerable();
+
+                // Áp dụng filter tìm kiếm
+                string filterText = txtTimKiem.Text.Trim();
+                if (!string.IsNullOrEmpty(filterText))
+                {
+                    filtered = filtered.Where(m =>
                         m.MaSach.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0 ||
                         m.MaDocGia.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        m.HoTen.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
-                        .ToList();
-
-                    dgvTraSach.DataSource = null;
-                    dgvTraSach.DataSource = filtered;
-
-                    if (filtered.Count == 0)
-                    {
-                        MessageBox.Show($"Không tìm thấy kết quả cho: {filterText}", "Thông báo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                        (m.HoTen != null && m.HoTen.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0));
                 }
+
+                // Áp dụng filter theo tình trạng
+                var activeFilters = new List<Func<TraSach, bool>>();
+
+                if (isFilteringTraTre)
+                    activeFilters.Add(m => m.TinhTrang == "Trả trễ");
+
+                if (isFilteringTraSom)
+                    activeFilters.Add(m => m.TinhTrang == "Trả sớm");
+
+                if (isFilteringDungHan)
+                    activeFilters.Add(m => m.TinhTrang == "Đúng hạn");
+
+                // Nếu có filter active, áp dụng filter (OR logic - hiển thị bản ghi thỏa mãn bất kỳ điều kiện nào)
+                if (activeFilters.Any())
+                {
+                    filtered = filtered.Where(m => activeFilters.Any(filter => filter(m)));
+                }
+
+                // SẮP XẾP THEO THỨ TỰ: ĐÚNG HẠN -> TRẢ SỚM -> TRẢ TRỄ
+                var sortedData = filtered.OrderBy(m =>
+                {
+                    switch (m.TinhTrang)
+                    {
+                        case "Đúng hạn":
+                            return 1; // Thứ tự 1 - hiển thị đầu tiên
+                        case "Trả sớm":
+                            return 2; // Thứ tự 2
+                        case "Trả trễ":
+                            return 3; // Thứ tự 3 - hiển thị cuối cùng
+                        default:
+                            return 4; // Các trường hợp khác
+                    }
+                }).ThenBy(m => m.MaSach); // Sắp xếp phụ theo mã sách nếu cùng tình trạng
+
+                dgvTraSach.DataSource = null;
+                dgvTraSach.DataSource = sortedData.ToList();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi tìm kiếm: {ex.Message}", "Lỗi",
+                MessageBox.Show($"Lỗi khi áp dụng bộ lọc: {ex.Message}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            ApplyFilters();
         }
 
         private void dgvTraSach_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -137,6 +257,7 @@ namespace WinFormsApp1
                 SelectTraSach.SoLuong = selectedRow.Cells["SoLuong"].Value?.ToString() ?? "";
                 SelectTraSach.NgayTraDuKien = selectedRow.Cells["NgayTraDuKien"].Value?.ToString() ?? "";
                 SelectTraSach.NgayTraThucTe = selectedRow.Cells["NgayTraThucTe"].Value?.ToString() ?? "";
+                SelectTraSach.TinhTrang = selectedRow.Cells["TinhTrang"].Value?.ToString() ?? "";
 
                 DisplaySelectedData();
             }
@@ -157,11 +278,29 @@ namespace WinFormsApp1
                 dateTimePickerNgayTraThucTe.Value = ngayTraThucTe;
             else
                 dateTimePickerNgayTraThucTe.Value = DateTime.Now;
+
+            // Cập nhật ngày mượn từ dữ liệu mượn sách
+            UpdateNgayMuonFromSelected();
+        }
+
+        private void UpdateNgayMuonFromSelected()
+        {
+            if (!string.IsNullOrEmpty(SelectTraSach.MaSach) && !string.IsNullOrEmpty(SelectTraSach.MaDocGia))
+            {
+                var muonSach = muonSaches.FirstOrDefault(m =>
+                    m.MaSach == SelectTraSach.MaSach && m.MaDocGia == SelectTraSach.MaDocGia);
+
+                if (muonSach != null && DateTime.TryParse(muonSach.NgayMuon, out DateTime ngayMuon))
+                {
+                    dateTimePickerNgayMuon.Value = ngayMuon;
+                }
+            }
         }
 
         private void ClearTraSachForm()
         {
             txtSoLuong.Text = "";
+            dateTimePickerNgayMuon.Value = DateTime.Now;
             dateTimePickerNgayTraDuKien.Value = DateTime.Now.AddDays(7);
             dateTimePickerNgayTraThucTe.Value = DateTime.Now;
             comboBoxMaSach.SelectedIndex = -1;
@@ -183,7 +322,12 @@ namespace WinFormsApp1
                     MaDocGia = comboBoxMaDocGia.SelectedValue.ToString(),
                     SoLuong = txtSoLuong.Text.Trim(),
                     NgayTraDuKien = dateTimePickerNgayTraDuKien.Value.ToString("dd/MM/yyyy"),
-                    NgayTraThucTe = dateTimePickerNgayTraThucTe.Value.ToString("dd/MM/yyyy")
+                    NgayTraThucTe = dateTimePickerNgayTraThucTe.Value.ToString("dd/MM/yyyy"),
+                    TinhTrang = GetTinhTrangTraSach(new TraSach
+                    {
+                        NgayTraThucTe = dateTimePickerNgayTraThucTe.Value.ToString("dd/MM/yyyy"),
+                        NgayTraDuKien = dateTimePickerNgayTraDuKien.Value.ToString("dd/MM/yyyy")
+                    })
                 };
 
                 traSaches.Insert(0, CreateTraSach);
@@ -234,6 +378,7 @@ namespace WinFormsApp1
                     SelectTraSach.SoLuong = txtSoLuong.Text.Trim();
                     SelectTraSach.NgayTraDuKien = dateTimePickerNgayTraDuKien.Value.ToString("dd/MM/yyyy");
                     SelectTraSach.NgayTraThucTe = dateTimePickerNgayTraThucTe.Value.ToString("dd/MM/yyyy");
+                    SelectTraSach.TinhTrang = GetTinhTrangTraSach(SelectTraSach);
 
                     if (indexSelectTraSach >= 0 && indexSelectTraSach < traSaches.Count)
                     {
@@ -323,7 +468,8 @@ namespace WinFormsApp1
                            $"Tên độc giả: {TenDocGia}\n" +
                            $"Số lượng: {SelectTraSach.SoLuong}\n" +
                            $"Ngày trả dự kiến: {SelectTraSach.NgayTraDuKien}\n" +
-                           $"Ngày trả thực tế: {SelectTraSach.NgayTraThucTe}";
+                           $"Ngày trả thực tế: {SelectTraSach.NgayTraThucTe}\n" +
+                           $"Tình trạng: {SelectTraSach.TinhTrang}";
 
             MessageBox.Show(chiTiet, "Chi tiết trả sách",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -398,8 +544,71 @@ namespace WinFormsApp1
             foreach (DataGridViewRow row in dgvTraSach.Rows)
             {
                 if (!row.IsNewRow)
+                {
                     row.Cells["SttTraSach"].Value = row.Index + 1;
+
+                    // Đảm bảo cột TinhTrang tồn tại và có giá trị
+                    if (row.Cells["TinhTrang"] != null && row.Cells["TinhTrang"].Value != null)
+                    {
+                        string tinhTrang = row.Cells["TinhTrang"].Value.ToString();
+
+                        // Tô màu cho các dòng theo tình trạng
+                        if (tinhTrang == "Trả trễ")
+                        {
+                            row.DefaultCellStyle.BackColor = Color.White;
+                            row.DefaultCellStyle.ForeColor = Color.Black; // Màu chữ để dễ đọc
+                        }
+                        else if (tinhTrang == "Trả sớm")
+                        {
+                            row.DefaultCellStyle.BackColor = Color.White;
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+                        }
+                        else if (tinhTrang == "Đúng hạn")
+                        {
+                            row.DefaultCellStyle.BackColor = Color.White;
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+                        }
+                        else
+                        {
+                            // Màu mặc định cho các trường hợp khác
+                            row.DefaultCellStyle.BackColor = Color.White;
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+                        }
+                    }
+                    else
+                    {
+                        // Nếu không có cột TinhTrang, tính toán trực tiếp từ ngày trả
+                        if (row.Cells["NgayTraThucTe"] != null && row.Cells["NgayTraThucTe"].Value != null &&
+                            row.Cells["NgayTraDuKien"] != null && row.Cells["NgayTraDuKien"].Value != null)
+                        {
+                            if (DateTime.TryParse(row.Cells["NgayTraThucTe"].Value.ToString(), out DateTime ngayTraThucTe) &&
+                                DateTime.TryParse(row.Cells["NgayTraDuKien"].Value.ToString(), out DateTime ngayTraDuKien))
+                            {
+                                if (ngayTraThucTe > ngayTraDuKien)
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.White;
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+                                else if (ngayTraThucTe < ngayTraDuKien)
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.White;
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+                                else
+                                {
+                                    row.DefaultCellStyle.BackColor = Color.White;
+                                    row.DefaultCellStyle.ForeColor = Color.Black;
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

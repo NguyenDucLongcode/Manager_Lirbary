@@ -12,8 +12,10 @@ namespace WinFormsApp1
         public string MaDocGia { get; set; }
         public string HoTen { get; set; }
         public string SoLuong { get; set; }
+        public string NgayMuon { get; set; }
         public string NgayTraDuKien { get; set; }
         public string NgayTraThucTe { get; set; }
+        public string TinhTrang { get; set; }
 
         private static readonly string DefaultPath = GetProjectDataPath();
 
