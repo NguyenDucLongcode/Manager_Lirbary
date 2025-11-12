@@ -17,7 +17,44 @@ namespace WinFormsApp1
         public FrmDocGia()
         {
             InitializeComponent();
+            SetupDataGridView();
             LoadData();
+        }
+
+        private void SetupDataGridView()
+        {
+            dgvDocGia.Columns.Clear();
+
+            // Thêm cột STT
+            dgvDocGia.Columns.Add("Stt", "STT");
+            dgvDocGia.Columns.Add("MaDocGia", "Mã Độc Giả");
+            dgvDocGia.Columns.Add("HoTen", "Họ Tên");
+            dgvDocGia.Columns.Add("GioiTinh", "Giới Tính");
+            dgvDocGia.Columns.Add("NgaySinh", "Ngày Sinh");
+            dgvDocGia.Columns.Add("DiaChi", "Địa Chỉ");
+            dgvDocGia.Columns.Add("SoDienThoai", "Số Điện Thoại");
+            dgvDocGia.Columns.Add("NgayLamThe", "Ngày Làm Thẻ");
+            dgvDocGia.Columns.Add("CMND", "CMND");
+
+            dgvDocGia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvDocGia.MultiSelect = false;
+
+            // Cấu hình auto-size giống FrmListBook
+            dgvDocGia.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvDocGia.Columns["Stt"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvDocGia.Columns["MaDocGia"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvDocGia.Columns["GioiTinh"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvDocGia.Columns["SoDienThoai"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvDocGia.Columns["CMND"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            dgvDocGia.Columns["Stt"].MinimumWidth = 50;
+            dgvDocGia.Columns["MaDocGia"].MinimumWidth = 100;
+            dgvDocGia.Columns["HoTen"].MinimumWidth = 200;
+
+            dgvDocGia.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dgvDocGia.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            dgvDocGia.Columns["Stt"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
         private void LoadData()
@@ -55,13 +92,35 @@ namespace WinFormsApp1
                     }
                 }
 
-                BindDataGridView();
+                RefreshDataGrid();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi đọc dữ liệu: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void RefreshDataGrid()
+        {
+            dgvDocGia.Rows.Clear();
+
+            for (int i = 0; i < ShareData.DocGiaList.Count; i++)
+            {
+                var docGia = ShareData.DocGiaList[i];
+                dgvDocGia.Rows.Add(
+                    i + 1,
+                    docGia.MaDocGia.ToUpper(),
+                    VietHoaChuCaiDau(docGia.HoTen),
+                    docGia.GioiTinh,
+                    docGia.NgaySinh.ToString("dd/MM/yyyy"),
+                    VietHoaChuCaiDau(docGia.DiaChi),
+                    docGia.SoDienThoai,
+                    docGia.NgayLamThe.ToString("dd/MM/yyyy"),
+                    docGia.CMND
+                );
+            }
+            dgvDocGia.AutoResizeRows(DataGridViewAutoSizeRowsMode.AllCells);
         }
 
         private DateTime ParseDateVietNam(string dateString)
@@ -86,42 +145,6 @@ namespace WinFormsApp1
             {
                 return DateTime.Now.AddYears(-18);
             }
-        }
-
-        private void BindDataGridView()
-        {
-            dgvDocGia.DataSource = null;
-            dgvDocGia.Columns.Clear();
-
-            DataTable dt = new DataTable();
-
-            dt.Columns.Add("STT", typeof(int));
-            dt.Columns.Add("Mã Độc Giả", typeof(string));
-            dt.Columns.Add("Họ Tên", typeof(string));
-            dt.Columns.Add("Giới Tính", typeof(string));
-            dt.Columns.Add("Ngày Sinh", typeof(string));
-            dt.Columns.Add("Địa Chỉ", typeof(string));
-            dt.Columns.Add("Số Điện Thoại", typeof(string));
-            dt.Columns.Add("Ngày Làm Thẻ", typeof(string));
-            dt.Columns.Add("CMND", typeof(string));
-
-            for (int i = 0; i < ShareData.DocGiaList.Count; i++)
-            {
-                var d = ShareData.DocGiaList[i];
-                dt.Rows.Add(
-                    i + 1,
-                    d.MaDocGia.ToUpper(),
-                    VietHoaChuCaiDau(d.HoTen),
-                    d.GioiTinh,
-                    d.NgaySinh.ToString("dd/MM/yyyy"),
-                    VietHoaChuCaiDau(d.DiaChi),
-                    d.SoDienThoai,
-                    d.NgayLamThe.ToString("dd/MM/yyyy"),
-                    d.CMND
-                );
-            }
-
-            dgvDocGia.DataSource = dt;
         }
 
         private string VietHoaChuCaiDau(string input)
@@ -208,7 +231,7 @@ namespace WinFormsApp1
                 ShareData.DocGiaList.Insert(0, docGia);
 
                 SaveData();
-                LoadData();
+                RefreshDataGrid();
                 ClearForm();
 
                 MessageBox.Show("Thêm độc giả thành công!", "Thông báo",
@@ -272,7 +295,7 @@ namespace WinFormsApp1
             docGia.CMND = newCMND;
 
             SaveData();
-            LoadData();
+            RefreshDataGrid();
             ClearForm();
 
             MessageBox.Show("Cập nhật thành công!", "Thông báo",
@@ -295,7 +318,7 @@ namespace WinFormsApp1
             {
                 ShareData.DocGiaList.RemoveAt(selectedIndex);
                 SaveData();
-                LoadData();
+                RefreshDataGrid();
                 ClearForm();
                 MessageBox.Show("Xóa thành công!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -306,7 +329,7 @@ namespace WinFormsApp1
         {
             if (e.RowIndex < 0) return;
 
-            var cellValue = dgvDocGia.Rows[e.RowIndex].Cells["Mã Độc Giả"].Value;
+            var cellValue = dgvDocGia.Rows[e.RowIndex].Cells["MaDocGia"].Value;
             if (cellValue == null) return;
 
             string ma = cellValue.ToString();
@@ -354,7 +377,7 @@ namespace WinFormsApp1
 
             if (string.IsNullOrEmpty(keyword))
             {
-                BindDataGridView();
+                RefreshDataGrid();
                 return;
             }
 
@@ -362,34 +385,24 @@ namespace WinFormsApp1
                 .Where(d => d.HoTen.ToLower().Contains(keyword) || d.MaDocGia.ToLower().Contains(keyword))
                 .ToList();
 
-            DataTable dt = new DataTable();
-            dt.Columns.Add("STT", typeof(int));
-            dt.Columns.Add("Mã Độc Giả", typeof(string));
-            dt.Columns.Add("Họ Tên", typeof(string));
-            dt.Columns.Add("Giới Tính", typeof(string));
-            dt.Columns.Add("Ngày Sinh", typeof(string));
-            dt.Columns.Add("Địa Chỉ", typeof(string));
-            dt.Columns.Add("Số Điện Thoại", typeof(string));
-            dt.Columns.Add("Ngày Làm Thẻ", typeof(string));
-            dt.Columns.Add("CMND", typeof(string));
+            dgvDocGia.Rows.Clear();
 
             for (int i = 0; i < filtered.Count; i++)
             {
-                var d = filtered[i];
-                dt.Rows.Add(
+                var docGia = filtered[i];
+                dgvDocGia.Rows.Add(
                     i + 1,
-                    d.MaDocGia.ToUpper(),
-                    VietHoaChuCaiDau(d.HoTen),
-                    d.GioiTinh,
-                    d.NgaySinh.ToString("dd/MM/yyyy"),
-                    VietHoaChuCaiDau(d.DiaChi),
-                    d.SoDienThoai,
-                    d.NgayLamThe.ToString("dd/MM/yyyy"),
-                    d.CMND
+                    docGia.MaDocGia.ToUpper(),
+                    VietHoaChuCaiDau(docGia.HoTen),
+                    docGia.GioiTinh,
+                    docGia.NgaySinh.ToString("dd/MM/yyyy"),
+                    VietHoaChuCaiDau(docGia.DiaChi),
+                    docGia.SoDienThoai,
+                    docGia.NgayLamThe.ToString("dd/MM/yyyy"),
+                    docGia.CMND
                 );
             }
-
-            dgvDocGia.DataSource = dt;
+            dgvDocGia.AutoResizeRows(DataGridViewAutoSizeRowsMode.AllCells);
         }
 
         private void btnChiTiet_Click(object sender, EventArgs e)
@@ -403,18 +416,9 @@ namespace WinFormsApp1
 
             var docGia = ShareData.DocGiaList[selectedIndex];
 
-            string thongTin = $"📚 Thông tin chi tiết độc giả:\n\n" +
-                              $"Mã độc giả: {docGia.MaDocGia.ToUpper()}\n" +
-                              $"Họ tên: {VietHoaChuCaiDau(docGia.HoTen)}\n" +
-                              $"Giới tính: {docGia.GioiTinh}\n" +
-                              $"Ngày sinh: {docGia.NgaySinh:dd/MM/yyyy}\n" +
-                              $"Địa chỉ: {VietHoaChuCaiDau(docGia.DiaChi)}\n" +
-                              $"Số điện thoại: {docGia.SoDienThoai}\n" +
-                              $"Ngày làm thẻ: {docGia.NgayLamThe:dd/MM/yyyy}\n" +
-                              $"CMND: {docGia.CMND}";
-
-            MessageBox.Show(thongTin, "Chi tiết độc giả",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Mở modal chi tiết giống như modal tác giả
+            ModalChiTietDocGia modalChiTiet = new ModalChiTietDocGia(docGia);
+            modalChiTiet.ShowDialog();
         }
 
         private void btnHuy_Click(object sender, EventArgs e)

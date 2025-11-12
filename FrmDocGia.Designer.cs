@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox1 = new TextBox();
+            tableLayoutPanel1 = new TableLayoutPanel();
             grbTTDocGia = new GroupBox();
             txtCMND = new TextBox();
             dateTimePickerNgayLamThe = new DateTimePicker();
@@ -52,12 +52,6 @@
             label2 = new Label();
             txtTimKiem = new TextBox();
             label1 = new Label();
-            grbChucNang = new GroupBox();
-            btnHuy = new Button();
-            btnChiTiet = new Button();
-            btnXoa = new Button();
-            btnSua = new Button();
-            btnCreate = new Button();
             dgvDocGia = new DataGridView();
             MaDocGia = new DataGridViewTextBoxColumn();
             HoTen = new DataGridViewTextBoxColumn();
@@ -67,26 +61,44 @@
             SoDienThoai = new DataGridViewTextBoxColumn();
             NgayLamThe = new DataGridViewTextBoxColumn();
             CMND = new DataGridViewTextBoxColumn();
+            grbChucNang = new GroupBox();
+            btnHuy = new Button();
+            btnChiTiet = new Button();
+            btnXoa = new Button();
+            btnSua = new Button();
+            btnCreate = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            tableLayoutPanel1.SuspendLayout();
             grbTTDocGia.SuspendLayout();
             grbTimKiem.SuspendLayout();
-            grbChucNang.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDocGia).BeginInit();
+            grbChucNang.SuspendLayout();
             SuspendLayout();
             // 
-            // textBox1
+            // tableLayoutPanel1
             // 
-            textBox1.Location = new Point(142, 10);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(1, 27);
-            textBox1.TabIndex = 0;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.5544319F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.44557F));
+            tableLayoutPanel1.Controls.Add(grbTTDocGia, 0, 1);
+            tableLayoutPanel1.Controls.Add(grbTimKiem, 1, 0);
+            tableLayoutPanel1.Controls.Add(dgvDocGia, 1, 1);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel1.Size = new Size(1904, 1033);
+            tableLayoutPanel1.TabIndex = 0;
             // 
             // grbTTDocGia
             // 
             grbTTDocGia.Controls.Add(txtCMND);
             grbTTDocGia.Controls.Add(dateTimePickerNgayLamThe);
             grbTTDocGia.Controls.Add(txtSoDienThoai);
+            grbTTDocGia.Controls.Add(grbChucNang);
             grbTTDocGia.Controls.Add(txtDiaChi);
             grbTTDocGia.Controls.Add(dateTimePickerNgaySinh);
             grbTTDocGia.Controls.Add(chkNu);
@@ -101,13 +113,12 @@
             grbTTDocGia.Controls.Add(lblHoTen);
             grbTTDocGia.Controls.Add(lblMaDG);
             grbTTDocGia.Controls.Add(txtMaDocGia);
+            grbTTDocGia.Dock = DockStyle.Fill;
             grbTTDocGia.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grbTTDocGia.ForeColor = Color.Blue;
-            grbTTDocGia.Location = new Point(22, 112);
-            grbTTDocGia.Margin = new Padding(2, 2, 2, 2);
+            grbTTDocGia.Location = new Point(3, 106);
             grbTTDocGia.Name = "grbTTDocGia";
-            grbTTDocGia.Padding = new Padding(2, 2, 2, 2);
-            grbTTDocGia.Size = new Size(424, 414);
+            grbTTDocGia.Size = new Size(480, 820);
             grbTTDocGia.TabIndex = 1;
             grbTTDocGia.TabStop = false;
             grbTTDocGia.Text = "Thông Tin Độc Giả";
@@ -115,7 +126,6 @@
             // txtCMND
             // 
             txtCMND.Location = new Point(132, 344);
-            txtCMND.Margin = new Padding(2, 2, 2, 2);
             txtCMND.Name = "txtCMND";
             txtCMND.Size = new Size(256, 34);
             txtCMND.TabIndex = 16;
@@ -124,15 +134,13 @@
             // 
             dateTimePickerNgayLamThe.Format = DateTimePickerFormat.Short;
             dateTimePickerNgayLamThe.Location = new Point(133, 293);
-            dateTimePickerNgayLamThe.Margin = new Padding(2, 2, 2, 2);
             dateTimePickerNgayLamThe.Name = "dateTimePickerNgayLamThe";
-            dateTimePickerNgayLamThe.Size = new Size(131, 34);
+            dateTimePickerNgayLamThe.Size = new Size(255, 34);
             dateTimePickerNgayLamThe.TabIndex = 15;
             // 
             // txtSoDienThoai
             // 
             txtSoDienThoai.Location = new Point(132, 232);
-            txtSoDienThoai.Margin = new Padding(2, 2, 2, 2);
             txtSoDienThoai.Name = "txtSoDienThoai";
             txtSoDienThoai.Size = new Size(256, 34);
             txtSoDienThoai.TabIndex = 14;
@@ -140,7 +148,6 @@
             // txtDiaChi
             // 
             txtDiaChi.Location = new Point(133, 185);
-            txtDiaChi.Margin = new Padding(2, 2, 2, 2);
             txtDiaChi.Name = "txtDiaChi";
             txtDiaChi.Size = new Size(255, 34);
             txtDiaChi.TabIndex = 13;
@@ -149,9 +156,8 @@
             // 
             dateTimePickerNgaySinh.Format = DateTimePickerFormat.Short;
             dateTimePickerNgaySinh.Location = new Point(133, 143);
-            dateTimePickerNgaySinh.Margin = new Padding(2, 2, 2, 2);
             dateTimePickerNgaySinh.Name = "dateTimePickerNgaySinh";
-            dateTimePickerNgaySinh.Size = new Size(131, 34);
+            dateTimePickerNgaySinh.Size = new Size(255, 34);
             dateTimePickerNgaySinh.TabIndex = 12;
             // 
             // chkNu
@@ -159,7 +165,6 @@
             chkNu.AutoSize = true;
             chkNu.ForeColor = Color.Black;
             chkNu.Location = new Point(213, 108);
-            chkNu.Margin = new Padding(2, 2, 2, 2);
             chkNu.Name = "chkNu";
             chkNu.Size = new Size(61, 32);
             chkNu.TabIndex = 11;
@@ -172,7 +177,6 @@
             chkNam.AutoSize = true;
             chkNam.ForeColor = Color.Black;
             chkNam.Location = new Point(133, 107);
-            chkNam.Margin = new Padding(2, 2, 2, 2);
             chkNam.Name = "chkNam";
             chkNam.Size = new Size(77, 32);
             chkNam.TabIndex = 10;
@@ -183,7 +187,6 @@
             // txtHoTen
             // 
             txtHoTen.Location = new Point(135, 76);
-            txtHoTen.Margin = new Padding(2, 2, 2, 2);
             txtHoTen.Name = "txtHoTen";
             txtHoTen.Size = new Size(253, 34);
             txtHoTen.TabIndex = 9;
@@ -193,7 +196,6 @@
             lblCMND.AutoSize = true;
             lblCMND.ForeColor = Color.Black;
             lblCMND.Location = new Point(14, 344);
-            lblCMND.Margin = new Padding(2, 0, 2, 0);
             lblCMND.Name = "lblCMND";
             lblCMND.Size = new Size(71, 28);
             lblCMND.TabIndex = 8;
@@ -204,7 +206,6 @@
             lblSDT.AutoSize = true;
             lblSDT.ForeColor = Color.Black;
             lblSDT.Location = new Point(14, 234);
-            lblSDT.Margin = new Padding(2, 0, 2, 0);
             lblSDT.Name = "lblSDT";
             lblSDT.Size = new Size(89, 56);
             lblSDT.TabIndex = 7;
@@ -215,7 +216,6 @@
             lblNgayLamThe.AutoSize = true;
             lblNgayLamThe.ForeColor = Color.Black;
             lblNgayLamThe.Location = new Point(14, 293);
-            lblNgayLamThe.Margin = new Padding(2, 0, 2, 0);
             lblNgayLamThe.Name = "lblNgayLamThe";
             lblNgayLamThe.Size = new Size(103, 56);
             lblNgayLamThe.TabIndex = 6;
@@ -226,7 +226,6 @@
             lblDiaChi.AutoSize = true;
             lblDiaChi.ForeColor = Color.Black;
             lblDiaChi.Location = new Point(14, 187);
-            lblDiaChi.Margin = new Padding(2, 0, 2, 0);
             lblDiaChi.Name = "lblDiaChi";
             lblDiaChi.Size = new Size(76, 28);
             lblDiaChi.TabIndex = 5;
@@ -237,7 +236,6 @@
             lblNgaySinh.AutoSize = true;
             lblNgaySinh.ForeColor = Color.Black;
             lblNgaySinh.Location = new Point(12, 147);
-            lblNgaySinh.Margin = new Padding(2, 0, 2, 0);
             lblNgaySinh.Name = "lblNgaySinh";
             lblNgaySinh.Size = new Size(105, 28);
             lblNgaySinh.TabIndex = 4;
@@ -248,7 +246,6 @@
             lblGioiTinh.AutoSize = true;
             lblGioiTinh.ForeColor = Color.Black;
             lblGioiTinh.Location = new Point(13, 108);
-            lblGioiTinh.Margin = new Padding(2, 0, 2, 0);
             lblGioiTinh.Name = "lblGioiTinh";
             lblGioiTinh.Size = new Size(94, 28);
             lblGioiTinh.TabIndex = 3;
@@ -259,7 +256,6 @@
             lblHoTen.AutoSize = true;
             lblHoTen.ForeColor = Color.Black;
             lblHoTen.Location = new Point(13, 76);
-            lblHoTen.Margin = new Padding(2, 0, 2, 0);
             lblHoTen.Name = "lblHoTen";
             lblHoTen.Size = new Size(77, 28);
             lblHoTen.TabIndex = 2;
@@ -270,7 +266,6 @@
             lblMaDG.AutoSize = true;
             lblMaDG.ForeColor = Color.Black;
             lblMaDG.Location = new Point(12, 38);
-            lblMaDG.Margin = new Padding(2, 0, 2, 0);
             lblMaDG.Name = "lblMaDG";
             lblMaDG.Size = new Size(116, 28);
             lblMaDG.TabIndex = 1;
@@ -279,7 +274,6 @@
             // txtMaDocGia
             // 
             txtMaDocGia.Location = new Point(135, 33);
-            txtMaDocGia.Margin = new Padding(2, 2, 2, 2);
             txtMaDocGia.Name = "txtMaDocGia";
             txtMaDocGia.Size = new Size(253, 34);
             txtMaDocGia.TabIndex = 0;
@@ -291,11 +285,12 @@
             grbTimKiem.Controls.Add(label2);
             grbTimKiem.Controls.Add(txtTimKiem);
             grbTimKiem.Controls.Add(label1);
+            grbTimKiem.Dock = DockStyle.Fill;
             grbTimKiem.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grbTimKiem.ForeColor = Color.Blue;
-            grbTimKiem.Location = new Point(452, 10);
+            grbTimKiem.Location = new Point(489, 3);
             grbTimKiem.Name = "grbTimKiem";
-            grbTimKiem.Size = new Size(272, 96);
+            grbTimKiem.Size = new Size(1412, 97);
             grbTimKiem.TabIndex = 4;
             grbTimKiem.TabStop = false;
             grbTimKiem.Text = "Tìm kiếm";
@@ -305,18 +300,18 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.SteelBlue;
-            label3.Location = new Point(15, 39);
+            label3.Location = new Point(14, 38);
             label3.Name = "label3";
             label3.Size = new Size(183, 23);
             label3.TabIndex = 3;
-            label3.Text = "Tìm kiếm theo Tên/Mã\r\n";
+            label3.Text = "Tìm kiếm theo Tên/Mã";
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.SteelBlue;
-            label2.Location = new Point(16, 40);
+            label2.Location = new Point(15, 39);
             label2.Name = "label2";
             label2.Size = new Size(0, 28);
             label2.TabIndex = 2;
@@ -335,10 +330,87 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.SteelBlue;
-            label1.Location = new Point(15, 48);
+            label1.Location = new Point(14, 47);
             label1.Name = "label1";
             label1.Size = new Size(0, 17);
             label1.TabIndex = 0;
+            // 
+            // dgvDocGia
+            // 
+            dgvDocGia.AllowUserToOrderColumns = true;
+            dgvDocGia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDocGia.Columns.AddRange(new DataGridViewColumn[] { MaDocGia, HoTen, GioiTinh, NgaySinh, DiaChi, SoDienThoai, NgayLamThe, CMND });
+            dgvDocGia.Dock = DockStyle.Fill;
+            dgvDocGia.Location = new Point(489, 106);
+            dgvDocGia.Name = "dgvDocGia";
+            dgvDocGia.RowHeadersWidth = 51;
+            dgvDocGia.Size = new Size(1412, 820);
+            dgvDocGia.TabIndex = 5;
+            dgvDocGia.CellClick += dgvDocGia_CellClick;
+            // 
+            // MaDocGia
+            // 
+            MaDocGia.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            MaDocGia.DataPropertyName = "MaDocGia";
+            MaDocGia.HeaderText = "Mã Độc Giả";
+            MaDocGia.MinimumWidth = 6;
+            MaDocGia.Name = "MaDocGia";
+            // 
+            // HoTen
+            // 
+            HoTen.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            HoTen.DataPropertyName = "HoTen";
+            HoTen.HeaderText = "Họ Tên";
+            HoTen.MinimumWidth = 6;
+            HoTen.Name = "HoTen";
+            // 
+            // GioiTinh
+            // 
+            GioiTinh.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            GioiTinh.DataPropertyName = "GioiTinh";
+            GioiTinh.HeaderText = "Giới Tính";
+            GioiTinh.MinimumWidth = 6;
+            GioiTinh.Name = "GioiTinh";
+            // 
+            // NgaySinh
+            // 
+            NgaySinh.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            NgaySinh.DataPropertyName = "NgaySinh";
+            NgaySinh.HeaderText = "Ngày Sinh";
+            NgaySinh.MinimumWidth = 6;
+            NgaySinh.Name = "NgaySinh";
+            // 
+            // DiaChi
+            // 
+            DiaChi.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            DiaChi.DataPropertyName = "DiaChi";
+            DiaChi.HeaderText = "Địa Chỉ";
+            DiaChi.MinimumWidth = 6;
+            DiaChi.Name = "DiaChi";
+            // 
+            // SoDienThoai
+            // 
+            SoDienThoai.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            SoDienThoai.DataPropertyName = "SoDienThoai";
+            SoDienThoai.HeaderText = "Số Điện Thoại";
+            SoDienThoai.MinimumWidth = 6;
+            SoDienThoai.Name = "SoDienThoai";
+            // 
+            // NgayLamThe
+            // 
+            NgayLamThe.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            NgayLamThe.DataPropertyName = "NgayLamThe";
+            NgayLamThe.HeaderText = "Ngày Làm Thẻ";
+            NgayLamThe.MinimumWidth = 6;
+            NgayLamThe.Name = "NgayLamThe";
+            // 
+            // CMND
+            // 
+            CMND.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            CMND.DataPropertyName = "CMND";
+            CMND.HeaderText = "CMND";
+            CMND.MinimumWidth = 6;
+            CMND.Name = "CMND";
             // 
             // grbChucNang
             // 
@@ -349,9 +421,9 @@
             grbChucNang.Controls.Add(btnCreate);
             grbChucNang.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grbChucNang.ForeColor = Color.Blue;
-            grbChucNang.Location = new Point(22, 531);
+            grbChucNang.Location = new Point(9, 410);
             grbChucNang.Name = "grbChucNang";
-            grbChucNang.Size = new Size(418, 194);
+            grbChucNang.Size = new Size(471, 237);
             grbChucNang.TabIndex = 4;
             grbChucNang.TabStop = false;
             grbChucNang.Text = "Chức năng";
@@ -359,7 +431,7 @@
             // btnHuy
             // 
             btnHuy.ForeColor = Color.Black;
-            btnHuy.Location = new Point(245, 129);
+            btnHuy.Location = new Point(29, 184);
             btnHuy.Name = "btnHuy";
             btnHuy.Size = new Size(103, 47);
             btnHuy.TabIndex = 4;
@@ -370,7 +442,7 @@
             // btnChiTiet
             // 
             btnChiTiet.ForeColor = Color.Black;
-            btnChiTiet.Location = new Point(94, 129);
+            btnChiTiet.Location = new Point(29, 113);
             btnChiTiet.Name = "btnChiTiet";
             btnChiTiet.Size = new Size(103, 47);
             btnChiTiet.TabIndex = 3;
@@ -381,7 +453,7 @@
             // btnXoa
             // 
             btnXoa.ForeColor = Color.Black;
-            btnXoa.Location = new Point(291, 53);
+            btnXoa.Location = new Point(165, 113);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(103, 47);
             btnXoa.TabIndex = 2;
@@ -392,7 +464,7 @@
             // btnSua
             // 
             btnSua.ForeColor = Color.Black;
-            btnSua.Location = new Point(164, 53);
+            btnSua.Location = new Point(164, 36);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(103, 47);
             btnSua.TabIndex = 1;
@@ -403,7 +475,7 @@
             // btnCreate
             // 
             btnCreate.ForeColor = Color.Black;
-            btnCreate.Location = new Point(29, 53);
+            btnCreate.Location = new Point(29, 36);
             btnCreate.Name = "btnCreate";
             btnCreate.Size = new Size(103, 47);
             btnCreate.TabIndex = 0;
@@ -411,110 +483,36 @@
             btnCreate.UseVisualStyleBackColor = true;
             btnCreate.Click += btnCreate_Click;
             // 
-            // dgvDocGia
-            // 
-            dgvDocGia.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDocGia.Columns.AddRange(new DataGridViewColumn[] { MaDocGia, HoTen, GioiTinh, NgaySinh, DiaChi, SoDienThoai, NgayLamThe, CMND });
-            dgvDocGia.Location = new Point(451, 112);
-            dgvDocGia.Margin = new Padding(2, 2, 2, 2);
-            dgvDocGia.Name = "dgvDocGia";
-            dgvDocGia.RowHeadersWidth = 62;
-            dgvDocGia.Size = new Size(1078, 704);
-            dgvDocGia.TabIndex = 5;
-            dgvDocGia.CellClick += dgvDocGia_CellClick;
-            // 
-            // MaDocGia
-            // 
-            MaDocGia.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            MaDocGia.DataPropertyName = "MaDocGia";
-            MaDocGia.HeaderText = "Mã Độc Giả";
-            MaDocGia.MinimumWidth = 8;
-            MaDocGia.Name = "MaDocGia";
-            // 
-            // HoTen
-            // 
-            HoTen.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            HoTen.DataPropertyName = "HoTen";
-            HoTen.HeaderText = "Họ Tên";
-            HoTen.MinimumWidth = 8;
-            HoTen.Name = "HoTen";
-            // 
-            // GioiTinh
-            // 
-            GioiTinh.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            GioiTinh.DataPropertyName = "GioiTinh";
-            GioiTinh.HeaderText = "Giới Tính";
-            GioiTinh.MinimumWidth = 8;
-            GioiTinh.Name = "GioiTinh";
-            // 
-            // NgaySinh
-            // 
-            NgaySinh.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            NgaySinh.DataPropertyName = "NgaySinh";
-            NgaySinh.HeaderText = "Ngày Sinh";
-            NgaySinh.MinimumWidth = 8;
-            NgaySinh.Name = "NgaySinh";
-            // 
-            // DiaChi
-            // 
-            DiaChi.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            DiaChi.DataPropertyName = "DiaChi";
-            DiaChi.HeaderText = "Địa Chỉ";
-            DiaChi.MinimumWidth = 8;
-            DiaChi.Name = "DiaChi";
-            // 
-            // SoDienThoai
-            // 
-            SoDienThoai.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            SoDienThoai.DataPropertyName = "SoDienThoai";
-            SoDienThoai.HeaderText = "Số Điện Thoại";
-            SoDienThoai.MinimumWidth = 8;
-            SoDienThoai.Name = "SoDienThoai";
-            // 
-            // NgayLamThe
-            // 
-            NgayLamThe.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            NgayLamThe.DataPropertyName = "NgayLamThe";
-            NgayLamThe.HeaderText = "Ngày Làm Thẻ";
-            NgayLamThe.MinimumWidth = 8;
-            NgayLamThe.Name = "NgayLamThe";
-            // 
-            // CMND
-            // 
-            CMND.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            CMND.DataPropertyName = "CMND";
-            CMND.HeaderText = "CMND";
-            CMND.MinimumWidth = 8;
-            CMND.Name = "CMND";
-            // 
             // FrmDocGia
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1539, 840);
-            Controls.Add(dgvDocGia);
-            Controls.Add(grbChucNang);
-            Controls.Add(grbTimKiem);
-            Controls.Add(grbTTDocGia);
-            Controls.Add(textBox1);
-            Margin = new Padding(2, 2, 2, 2);
+            ClientSize = new Size(1904, 1033);
+            Controls.Add(tableLayoutPanel1);
             Name = "FrmDocGia";
             Text = "FrmDocGia";
-            //Load += FrmDocGia_Load;
+            tableLayoutPanel1.ResumeLayout(false);
             grbTTDocGia.ResumeLayout(false);
             grbTTDocGia.PerformLayout();
             grbTimKiem.ResumeLayout(false);
             grbTimKiem.PerformLayout();
-            grbChucNang.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvDocGia).EndInit();
+            grbChucNang.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private TextBox textBox1;
+        private TableLayoutPanel tableLayoutPanel1;
         private GroupBox grbTTDocGia;
+        private TextBox txtCMND;
+        private DateTimePicker dateTimePickerNgayLamThe;
+        private TextBox txtSoDienThoai;
+        private TextBox txtDiaChi;
+        private DateTimePicker dateTimePickerNgaySinh;
+        private CheckBox chkNu;
+        private CheckBox chkNam;
+        private TextBox txtHoTen;
         private Label lblCMND;
         private Label lblSDT;
         private Label lblNgayLamThe;
@@ -524,14 +522,6 @@
         private Label lblHoTen;
         private Label lblMaDG;
         private TextBox txtMaDocGia;
-        private CheckBox chkNu;
-        private CheckBox chkNam;
-        private TextBox txtHoTen;
-        private DateTimePicker dateTimePickerNgayLamThe;
-        private TextBox txtSoDienThoai;
-        private TextBox txtDiaChi;
-        private DateTimePicker dateTimePickerNgaySinh;
-        private TextBox txtCMND;
         private GroupBox grbTimKiem;
         private Label label3;
         private Label label2;

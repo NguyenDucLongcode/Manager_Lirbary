@@ -23,6 +23,8 @@
             label5 = new Label();
             label4 = new Label();
             groupBox3 = new GroupBox();
+            dateTimePickerNgayMuon = new DateTimePicker();
+            label8 = new Label();
             comboBoxMaDocGia = new ComboBox();
             comboBoxMaSach = new ComboBox();
             dateTimePickerNgayTraDuKien = new DateTimePicker();
@@ -30,6 +32,9 @@
             label12 = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox1 = new GroupBox();
+            checkBoxDungHan = new CheckBox();
+            checkBoxTraSom = new CheckBox();
+            checkBoxTraTre = new CheckBox();
             label3 = new Label();
             label2 = new Label();
             txtTimKiem = new TextBox();
@@ -39,8 +44,10 @@
             MaSach = new DataGridViewTextBoxColumn();
             MaDocGia = new DataGridViewTextBoxColumn();
             SoLuong = new DataGridViewTextBoxColumn();
+            NgayMuon = new DataGridViewTextBoxColumn();
             NgayTraDuKien = new DataGridViewTextBoxColumn();
             NgayTraThucTe = new DataGridViewTextBoxColumn();
+            TinhTrang = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
             groupBox4 = new GroupBox();
             btnHuy = new Button();
@@ -59,7 +66,8 @@
             // dateTimePickerNgayTraThucTe
             // 
             dateTimePickerNgayTraThucTe.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePickerNgayTraThucTe.Location = new Point(154, 275);
+            dateTimePickerNgayTraThucTe.Format = DateTimePickerFormat.Short;
+            dateTimePickerNgayTraThucTe.Location = new Point(152, 321);
             dateTimePickerNgayTraThucTe.Name = "dateTimePickerNgayTraThucTe";
             dateTimePickerNgayTraThucTe.Size = new Size(271, 34);
             dateTimePickerNgayTraThucTe.TabIndex = 10;
@@ -67,13 +75,13 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label7.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             label7.ForeColor = SystemColors.ActiveCaptionText;
-            label7.Location = new Point(1, 279);
+            label7.Location = new Point(25, 321);
             label7.Name = "label7";
-            label7.Size = new Size(145, 23);
+            label7.Size = new Size(84, 46);
             label7.TabIndex = 9;
-            label7.Text = "Ngày Trả Thực Tế";
+            label7.Text = "Ngày Trả \r\nThực Tế";
             // 
             // txtSoLuong
             // 
@@ -82,6 +90,7 @@
             txtSoLuong.Name = "txtSoLuong";
             txtSoLuong.Size = new Size(271, 36);
             txtSoLuong.TabIndex = 3;
+            txtSoLuong.KeyPress += txtSoLuong_KeyPress;
             // 
             // label5
             // 
@@ -107,6 +116,8 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(dateTimePickerNgayMuon);
+            groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(comboBoxMaDocGia);
             groupBox3.Controls.Add(comboBoxMaSach);
             groupBox3.Controls.Add(dateTimePickerNgayTraDuKien);
@@ -126,6 +137,30 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Thông tin trả sách";
             // 
+            // dateTimePickerNgayMuon
+            // 
+            dateTimePickerNgayMuon.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePickerNgayMuon.Format = DateTimePickerFormat.Short;
+            dateTimePickerNgayMuon.ImeMode = ImeMode.NoControl;
+            dateTimePickerNgayMuon.Location = new Point(153, 217);
+            dateTimePickerNgayMuon.Margin = new Padding(2);
+            dateTimePickerNgayMuon.Name = "dateTimePickerNgayMuon";
+            dateTimePickerNgayMuon.Size = new Size(272, 34);
+            dateTimePickerNgayMuon.TabIndex = 12;
+            dateTimePickerNgayMuon.CloseUp += ComboBox_SelectedIndexChanged;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label8.ForeColor = SystemColors.ActiveCaptionText;
+            label8.Location = new Point(25, 227);
+            label8.Margin = new Padding(2, 0, 2, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(103, 23);
+            label8.TabIndex = 11;
+            label8.Text = "Ngày Mượn";
+            // 
             // comboBoxMaDocGia
             // 
             comboBoxMaDocGia.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
@@ -136,6 +171,7 @@
             comboBoxMaDocGia.Name = "comboBoxMaDocGia";
             comboBoxMaDocGia.Size = new Size(272, 31);
             comboBoxMaDocGia.TabIndex = 21;
+            comboBoxMaDocGia.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
             // 
             // comboBoxMaSach
             // 
@@ -147,11 +183,13 @@
             comboBoxMaSach.Name = "comboBoxMaSach";
             comboBoxMaSach.Size = new Size(272, 31);
             comboBoxMaSach.TabIndex = 20;
+            comboBoxMaSach.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
             // 
             // dateTimePickerNgayTraDuKien
             // 
             dateTimePickerNgayTraDuKien.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePickerNgayTraDuKien.Location = new Point(152, 223);
+            dateTimePickerNgayTraDuKien.Format = DateTimePickerFormat.Short;
+            dateTimePickerNgayTraDuKien.Location = new Point(152, 265);
             dateTimePickerNgayTraDuKien.Name = "dateTimePickerNgayTraDuKien";
             dateTimePickerNgayTraDuKien.Size = new Size(271, 34);
             dateTimePickerNgayTraDuKien.TabIndex = 10;
@@ -159,13 +197,14 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             label6.ForeColor = SystemColors.ActiveCaptionText;
-            label6.Location = new Point(1, 233);
+            label6.Location = new Point(25, 265);
             label6.Name = "label6";
-            label6.Size = new Size(145, 23);
+            label6.Size = new Size(84, 46);
             label6.TabIndex = 9;
-            label6.Text = "Ngày Trả Dự Kiến";
+            label6.Text = "Ngày Trả \r\nDự Kiến";
+            label6.Click += label6_Click;
             // 
             // label12
             // 
@@ -197,6 +236,9 @@
             // groupBox1
             // 
             groupBox1.BackColor = SystemColors.ButtonFace;
+            groupBox1.Controls.Add(checkBoxDungHan);
+            groupBox1.Controls.Add(checkBoxTraSom);
+            groupBox1.Controls.Add(checkBoxTraTre);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(txtTimKiem);
@@ -205,10 +247,52 @@
             groupBox1.ForeColor = Color.Blue;
             groupBox1.Location = new Point(489, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(272, 96);
+            groupBox1.Size = new Size(658, 97);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Tìm kiếm";
+            // 
+            // checkBoxDungHan
+            // 
+            checkBoxDungHan.AutoSize = true;
+            checkBoxDungHan.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            checkBoxDungHan.ForeColor = Color.Blue;
+            checkBoxDungHan.Location = new Point(454, 32);
+            checkBoxDungHan.Margin = new Padding(2);
+            checkBoxDungHan.Name = "checkBoxDungHan";
+            checkBoxDungHan.Size = new Size(178, 24);
+            checkBoxDungHan.TabIndex = 6;
+            checkBoxDungHan.Text = "Hiển thị trả đúng hạn";
+            checkBoxDungHan.UseVisualStyleBackColor = true;
+            checkBoxDungHan.CheckedChanged += CheckBoxFilter_CheckedChanged;
+            // 
+            // checkBoxTraSom
+            // 
+            checkBoxTraSom.AutoSize = true;
+            checkBoxTraSom.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            checkBoxTraSom.ForeColor = Color.Blue;
+            checkBoxTraSom.Location = new Point(272, 65);
+            checkBoxTraSom.Margin = new Padding(2);
+            checkBoxTraSom.Name = "checkBoxTraSom";
+            checkBoxTraSom.Size = new Size(174, 24);
+            checkBoxTraSom.TabIndex = 5;
+            checkBoxTraSom.Text = "Hiển thị sách trả sớm";
+            checkBoxTraSom.UseVisualStyleBackColor = true;
+            checkBoxTraSom.CheckedChanged += CheckBoxFilter_CheckedChanged;
+            // 
+            // checkBoxTraTre
+            // 
+            checkBoxTraTre.AutoSize = true;
+            checkBoxTraTre.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            checkBoxTraTre.ForeColor = Color.Blue;
+            checkBoxTraTre.Location = new Point(272, 32);
+            checkBoxTraTre.Margin = new Padding(2);
+            checkBoxTraTre.Name = "checkBoxTraTre";
+            checkBoxTraTre.Size = new Size(165, 24);
+            checkBoxTraTre.TabIndex = 4;
+            checkBoxTraTre.Text = "Hiển thị sách trả trễ";
+            checkBoxTraTre.UseVisualStyleBackColor = true;
+            checkBoxTraTre.CheckedChanged += checkBoxTraTre_CheckedChanged;
             // 
             // label3
             // 
@@ -238,6 +322,7 @@
             txtTimKiem.Name = "txtTimKiem";
             txtTimKiem.Size = new Size(223, 25);
             txtTimKiem.TabIndex = 1;
+            txtTimKiem.TextChanged += txtTimKiem_TextChanged;
             // 
             // label1
             // 
@@ -254,7 +339,7 @@
             dgvTraSach.AllowUserToOrderColumns = true;
             dgvTraSach.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvTraSach.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvTraSach.Columns.AddRange(new DataGridViewColumn[] { SttTraSach, MaSach, MaDocGia, SoLuong, NgayTraDuKien, NgayTraThucTe });
+            dgvTraSach.Columns.AddRange(new DataGridViewColumn[] { SttTraSach, MaSach, MaDocGia, SoLuong, NgayMuon, NgayTraDuKien, NgayTraThucTe, TinhTrang });
             dgvTraSach.Cursor = Cursors.Hand;
             dgvTraSach.Location = new Point(489, 106);
             dgvTraSach.Name = "dgvTraSach";
@@ -282,6 +367,7 @@
             // MaDocGia
             // 
             MaDocGia.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            MaDocGia.DataPropertyName = "MaDocGia";
             MaDocGia.HeaderText = "Mã Độc Giả";
             MaDocGia.MinimumWidth = 6;
             MaDocGia.Name = "MaDocGia";
@@ -293,6 +379,14 @@
             SoLuong.HeaderText = "Số Lượng";
             SoLuong.MinimumWidth = 6;
             SoLuong.Name = "SoLuong";
+            // 
+            // NgayMuon
+            // 
+            NgayMuon.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            NgayMuon.DataPropertyName = "NgayMuon";
+            NgayMuon.HeaderText = "Ngày Mượn";
+            NgayMuon.MinimumWidth = 6;
+            NgayMuon.Name = "NgayMuon";
             // 
             // NgayTraDuKien
             // 
@@ -309,6 +403,14 @@
             NgayTraThucTe.HeaderText = "Ngày Trả Thực Tế";
             NgayTraThucTe.MinimumWidth = 6;
             NgayTraThucTe.Name = "NgayTraThucTe";
+            // 
+            // TinhTrang
+            // 
+            TinhTrang.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            TinhTrang.DataPropertyName = "TinhTrang";
+            TinhTrang.HeaderText = "Tình Trạng";
+            TinhTrang.MinimumWidth = 6;
+            TinhTrang.Name = "TinhTrang";
             // 
             // groupBox2
             // 
@@ -431,11 +533,18 @@
         private Label label12;
         private ComboBox comboBoxMaDocGia;
         private ComboBox comboBoxMaSach;
+        private CheckBox checkBoxTraTre;
         private DataGridViewTextBoxColumn SttTraSach;
         private DataGridViewTextBoxColumn MaSach;
         private DataGridViewTextBoxColumn MaDocGia;
         private DataGridViewTextBoxColumn SoLuong;
+        private DataGridViewTextBoxColumn NgayMuon;
         private DataGridViewTextBoxColumn NgayTraDuKien;
         private DataGridViewTextBoxColumn NgayTraThucTe;
+        private DataGridViewTextBoxColumn TinhTrang;
+        private DateTimePicker dateTimePickerNgayMuon;
+        private Label label8;
+        private CheckBox checkBoxTraSom;
+        private CheckBox checkBoxDungHan;
     }
 }
