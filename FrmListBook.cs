@@ -300,7 +300,7 @@ namespace WinFormsApp1
                 createBook = new ListBook
                 {
                     MaSach = maSach.Trim().ToUpper(),
-                    TenSach = txtTenSach.Text.Trim(),
+                    TenSach = FucString.FirstCapitalLetter(txtTenSach.Text),
                     TheLoai = selectedTheLoai,
                     NgayXB = dateTimePickerBook.Value.ToString("yyyy-MM-dd"),
                     MaTacGia = comboBoxMaTacGia.SelectedValue.ToString(),
@@ -379,7 +379,7 @@ namespace WinFormsApp1
                 if (confirm == DialogResult.Yes)
                 {
                     // Cập nhật thông tin
-                    selectedBook.TenSach = txtTenSach.Text.Trim();
+                    selectedBook.TenSach = FucString.FirstCapitalLetter(txtTenSach.Text);
                     selectedBook.TheLoai = selectedTheLoai;
                     selectedBook.MaTacGia = comboBoxMaTacGia.SelectedValue.ToString();
                     selectedBook.NgayXB = dateTimePickerBook.Value.ToString("yyyy-MM-dd");
