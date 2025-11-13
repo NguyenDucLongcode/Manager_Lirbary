@@ -38,11 +38,12 @@ namespace WinFormsApp1
             LoadMuonSachData();
 
             ConfigComboBox();
-
+           
             dgvTraSach.AutoGenerateColumns = false;
             dgvTraSach.Columns["MaSach"].DataPropertyName = "MaSach";
             dgvTraSach.Columns["MaDocGia"].DataPropertyName = "MaDocGia";
             dgvTraSach.Columns["SoLuong"].DataPropertyName = "SoLuong";
+            dgvTraSach.Columns["NgayMuon"].DataPropertyName = " NgayMuon";
             dgvTraSach.Columns["NgayTraDuKien"].DataPropertyName = "NgayTraDuKien";
             dgvTraSach.Columns["NgayTraThucTe"].DataPropertyName = "NgayTraThucTe";
             dgvTraSach.Columns["TinhTrang"].DataPropertyName = "TinhTrang";

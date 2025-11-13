@@ -245,6 +245,22 @@ namespace WinFormsApp1
                 return;
             }
 
+            if (txtPenName.Text.Any(char.IsDigit))
+            {
+                MessageBox.Show("Bút danh không được chứa số", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtName.Focus();
+                return;
+            }
+
+            if (FucString.ContainsSpecialCharacters(txtPenName.Text))
+            {
+                MessageBox.Show("Bút danh không được có kí tự đặc biệt", "Lỗi",
+                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtName.Focus();
+                return;
+            }
+
             // Check trùng bút danh
             if (authorList.Any(a => a.PenName.ToLower() == txtPenName.Text.ToLower()))
             {
@@ -421,6 +437,23 @@ namespace WinFormsApp1
                 txtPenName.Focus();
                 return;
             }
+
+            if (txtPenName.Text.Any(char.IsDigit))
+            {
+                MessageBox.Show("Bút danh không được chứa số", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtName.Focus();
+                return;
+            }
+
+            if (FucString.ContainsSpecialCharacters(txtPenName.Text))
+            {
+                MessageBox.Show("Bút danh không được có kí tự đặc biệt", "Lỗi",
+                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtName.Focus();
+                return;
+            }
+
 
             // Kiểm tra bút danh có thay đổi hay ko 
             if (FucString.FirstCapitalLetter(txtPenName.Text) != SelectedAuthor.PenName)
