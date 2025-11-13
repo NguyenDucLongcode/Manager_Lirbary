@@ -107,6 +107,17 @@ namespace WinFormsApp1
                 foreach (var item in traSaches)
                 {
                     item.TinhTrang = GetTinhTrangTraSach(item);
+
+                
+                    if (string.IsNullOrEmpty(item.NgayMuon))
+                    {
+                        var muonSach = muonSaches.FirstOrDefault(m =>
+                            m.MaSach == item.MaSach && m.MaDocGia == item.MaDocGia);
+                        if (muonSach != null)
+                        {
+                            item.NgayMuon = muonSach.NgayMuon;
+                        }
+                    }
                 }
 
                 dgvTraSach.DataSource = null;
@@ -269,6 +280,20 @@ namespace WinFormsApp1
             comboBoxMaDocGia.SelectedValue = SelectTraSach.MaDocGia;
             txtSoLuong.Text = SelectTraSach.SoLuong;
 
+           
+            if (DateTime.TryParse(SelectTraSach.NgayMuon, out DateTime ngayMuon))
+                dateTimePickerNgayMuon.Value = ngayMuon;
+            else
+            {
+                
+                var muonSach = muonSaches.FirstOrDefault(m =>
+                    m.MaSach == SelectTraSach.MaSach && m.MaDocGia == SelectTraSach.MaDocGia);
+                if (muonSach != null && DateTime.TryParse(muonSach.NgayMuon, out DateTime ngayMuonFromMuonSach))
+                    dateTimePickerNgayMuon.Value = ngayMuonFromMuonSach;
+                else
+                    dateTimePickerNgayMuon.Value = DateTime.Now;
+            }
+
             if (DateTime.TryParse(SelectTraSach.NgayTraDuKien, out DateTime ngayTraDuKien))
                 dateTimePickerNgayTraDuKien.Value = ngayTraDuKien;
             else
@@ -278,9 +303,6 @@ namespace WinFormsApp1
                 dateTimePickerNgayTraThucTe.Value = ngayTraThucTe;
             else
                 dateTimePickerNgayTraThucTe.Value = DateTime.Now;
-
-            // Cập nhật ngày mượn từ dữ liệu mượn sách
-            UpdateNgayMuonFromSelected();
         }
 
         private void UpdateNgayMuonFromSelected()
@@ -321,6 +343,7 @@ namespace WinFormsApp1
                     MaSach = comboBoxMaSach.SelectedValue.ToString(),
                     MaDocGia = comboBoxMaDocGia.SelectedValue.ToString(),
                     SoLuong = txtSoLuong.Text.Trim(),
+                    NgayMuon = dateTimePickerNgayMuon.Value.ToString("dd/MM/yyyy"), 
                     NgayTraDuKien = dateTimePickerNgayTraDuKien.Value.ToString("dd/MM/yyyy"),
                     NgayTraThucTe = dateTimePickerNgayTraThucTe.Value.ToString("dd/MM/yyyy"),
                     TinhTrang = GetTinhTrangTraSach(new TraSach
@@ -376,6 +399,7 @@ namespace WinFormsApp1
                     SelectTraSach.MaSach = comboBoxMaSach.SelectedValue.ToString();
                     SelectTraSach.MaDocGia = comboBoxMaDocGia.SelectedValue.ToString();
                     SelectTraSach.SoLuong = txtSoLuong.Text.Trim();
+                    SelectTraSach.NgayMuon = dateTimePickerNgayMuon.Value.ToString("dd/MM/yyyy"); 
                     SelectTraSach.NgayTraDuKien = dateTimePickerNgayTraDuKien.Value.ToString("dd/MM/yyyy");
                     SelectTraSach.NgayTraThucTe = dateTimePickerNgayTraThucTe.Value.ToString("dd/MM/yyyy");
                     SelectTraSach.TinhTrang = GetTinhTrangTraSach(SelectTraSach);
@@ -407,7 +431,6 @@ namespace WinFormsApp1
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void btnXoa_Click(object sender, EventArgs e)
         {
             try
